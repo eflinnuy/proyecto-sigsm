@@ -1,1 +1,66 @@
-:root{--azul:#003366;--boton:#0056b3;--fondo:#f8f9fa}body{background:var(--fondo);color:var(--azul);font-size:1.08rem}.portal-header{background:var(--azul)}.card-accesible{border:2px solid #dee2e6;border-radius:12px;box-shadow:0 4px 8px #0000000d;background:#fff}.accordion-button{font-size:1.15rem;font-weight:bold;padding:1rem 1.25rem;color:var(--azul)}.accordion-button:not(.collapsed){background:#e9ecef;color:var(--boton)}.list-group-item-action{font-size:1.08rem;padding:1rem;border-left:4px solid transparent}.list-group-item-action:hover{border-left-color:var(--boton);background:#f1f3f5}.btn-accesible{padding:15px 20px;font-size:1.2rem;font-weight:bold;border-radius:10px;background:var(--boton);color:#fff;border:2px solid #004085;text-align:left;width:100%;text-decoration:none}.btn-accesible:hover{background:#004085;color:#fff}@media(max-width:600px){body{font-size:1rem}.container{padding-left:12px;padding-right:12px}.portal-header{padding:22px 12px!important}}
+:root {
+    --azul: #003366;
+    --boton: #0056b3;
+    --fondo: #f8f9fa;
+}
+body {
+    background: var(--fondo);
+    color: var(--azul);
+    font-size: 1.08rem;
+}
+.portal-header {
+    background: var(--azul);
+}
+.card-accesible {
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px #0000000d;
+    background: #fff;
+}
+.accordion-button {
+    font-size: 1.15rem;
+    font-weight: bold;
+    padding: 1rem 1.25rem;
+    color: var(--azul);
+}
+.accordion-button:not(.collapsed) {
+    background: #e9ecef;
+    color: var(--boton);
+}
+.list-group-item-action {
+    font-size: 1.08rem;
+    padding: 1rem;
+    border-left: 4px solid transparent;
+}
+.list-group-item-action:hover {
+    border-left-color: var(--boton);
+    background: #f1f3f5;
+}
+.btn-accesible {
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    background: var(--boton);
+    color: #fff;
+    border: 2px solid #004085;
+    text-align: left;
+    width: 100%;
+    text-decoration: none;
+}
+.btn-accesible:hover {
+    background: #004085;
+    color: #fff;
+}
+@media(max-width:600px) {
+    body {
+        font-size: 1rem;
+    }
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .portal-header {
+        padding: 22px 12px!important;
+    }
+}

@@ -1,1 +1,11 @@
-<?php require_once __DIR__ . '/../logica/funciones.php';soloAdmin();require_once __DIR__ . '/../datos/conexion.php';$id=(int)($_GET['id']??0);$s=$conexion->prepare('UPDATE documentos SET activo=0 WHERE id=?');$s->execute([$id]);mensaje('Documento eliminado.');header('Location: documentos.php');exit;?>
+<?php
+require_once __DIR__ . '/../logica/funciones.php';
+soloAdmin();
+require_once __DIR__ . '/../datos/conexion.php';
+$id = (int)($_GET['id'] ?? 0);
+$s = $conexion->prepare('UPDATE documentos SET activo=0 WHERE id=?');
+$s->execute([$id]);
+mensaje('Documento eliminado.');
+header('Location: documentos.php');
+exit;
+ ?>

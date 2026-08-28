@@ -1,1 +1,91 @@
-<?php require_once __DIR__ . '/../logica/funciones.php';soloAdmin();require_once __DIR__ . '/../datos/conexion.php';$q=trim($_GET['q']??'');if($q){$s=$conexion->prepare('SELECT * FROM traslados WHERE paciente LIKE ? OR destino LIKE ? OR estado LIKE ? ORDER BY id DESC');$s->execute(["%$q%","%$q%","%$q%"]);}else{$s=$conexion->query('SELECT * FROM traslados ORDER BY id DESC');}$lista=$s->fetchAll(PDO::FETCH_ASSOC);$titulo='Traslados';require __DIR__ . '/vistas/encabezado.php';?><div class="cabecera"><div><h1>Traslados</h1><p>Seguimiento de ambulancias y otros vehículos.</p></div><a class="boton" href="nuevo_traslado.php">+ Nuevo traslado</a></div><form class="buscar"><input name="q" value="<?= limpiar($q) ?>" placeholder="Buscar paciente, destino o estado"><button>Buscar</button></form><div class="tabla-wrap"><table><tr><th>Paciente / elemento</th><th>Chofer</th><th>Enfermero</th><th>Origen</th><th>Destino</th><th>Estado</th><th>Acción</th></tr><?php foreach($lista as $x): ?><tr><td><?= limpiar($x['paciente']) ?></td><td><?= limpiar($x['chofer']) ?></td><td><?= limpiar($x['enfermero']) ?></td><td><?= limpiar($x['origen']) ?></td><td><?= limpiar($x['destino']) ?></td><td><span class="estado"><?= limpiar($x['estado']) ?></span></td><td><a href="editar_traslado.php?id=<?= $x['id'] ?>">Editar</a></td></tr><?php endforeach; ?></table></div><?php require __DIR__ . '/vistas/pie.php'; ?>
+<?php
+require_once __DIR__ . '/../logica/funciones.php';
+soloAdmin();
+require_once __DIR__ . '/../datos/conexion.php';
+$q = trim($_GET['q'] ?? '');
+if ($q) {
+    $s = $conexion->prepare('SELECT * FROM traslados WHERE paciente LIKE ? OR destino LIKE ? OR estado LIKE ? ORDER BY id DESC');
+    $s->execute(["%$q%", "%$q%", "%$q%"]);
+} else {
+    $s = $conexion->query('SELECT * FROM traslados ORDER BY id DESC');
+}
+$lista = $s->fetchAll(PDO::FETCH_ASSOC);
+$titulo = 'Traslados';
+require __DIR__ . '/vistas/encabezado.php';
+ ?>
+<div class="cabecera">
+    <div>
+        <h1>
+            Traslados
+        </h1>
+        <p>
+            Seguimiento de ambulancias y otros vehículos.
+        </p>
+    </div>
+    <a class="boton" href="nuevo_traslado.php"> + Nuevo traslado</a>
+</div>
+<form class="buscar">
+    <input name="q" value="<?= limpiar($q) ?>" placeholder="Buscar paciente, destino o estado">
+    <button>
+        Buscar
+    </button>
+</form>
+<div class="tabla-wrap">
+    <table>
+        <tr>
+            <th>
+                Paciente / elemento
+            </th>
+            <th>
+                Chofer
+            </th>
+            <th>
+                Enfermero
+            </th>
+            <th>
+                Origen
+            </th>
+            <th>
+                Destino
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Acción
+            </th>
+        </tr>
+        <?php
+foreach ($lista as $x) :
+ ?>
+        <tr>
+            <td>
+                <?= limpiar($x['paciente']) ?>
+            </td>
+            <td>
+                <?= limpiar($x['chofer']) ?>
+            </td>
+            <td>
+                <?= limpiar($x['enfermero']) ?>
+            </td>
+            <td>
+                <?= limpiar($x['origen']) ?>
+            </td>
+            <td>
+                <?= limpiar($x['destino']) ?>
+            </td>
+            <td>
+                <span class="estado"> <?= limpiar($x['estado']) ?></span>
+            </td>
+            <td>
+                <a href="editar_traslado.php?id=<?= $x['id'] ?>"> Editar</a>
+            </td>
+        </tr>
+        <?php
+endforeach;
+ ?>
+    </table>
+</div>
+<?php
+require __DIR__ . '/vistas/pie.php';
+ ?>
