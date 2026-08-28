@@ -1,0 +1,10 @@
+MANUAL DE USUARIO - SIGSM
+
+ADMINISTRADOR
+Ingresar con admin / 1234. Puede administrar documentos, encuestas y traslados.
+
+USUARIO BÁSICO
+Ingresar con usuario / 1234. No tiene acceso a las funciones administrativas.
+
+PACIENTE
+Entrar al Portal del Paciente sin usuario ni contraseña para consultar documentos y responder encuestas activas.

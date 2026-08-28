@@ -1,0 +1,11 @@
+MANUAL DE INSTALACIÓN - SIGSM
+
+1. Instalar XAMPP y activar Apache y MySQL.
+2. Copiar la carpeta sigsm dentro de htdocs.
+3. Abrir phpMyAdmin y ejecutar sql/sigsm.sql.
+4. Revisar datos/conexion.php si las credenciales son diferentes.
+5. Abrir http://localhost/sigsm/
+
+Usuarios de prueba:
+admin / 1234
+usuario / 1234

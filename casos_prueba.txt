@@ -1,0 +1,14 @@
+CASOS DE PRUEBA BASICOS
+
+1. Login correcto: admin/1234 -> entra al inicio.
+2. Login incorrecto -> muestra error.
+3. Usuario sin sesion intenta abrir documentos -> vuelve al login.
+4. Admin crea documento PDF -> aparece en listado.
+5. Admin edita documento -> cambia el titulo.
+6. Admin elimina documento -> deja de aparecer.
+7. Usuario abre documento -> puede ver el enlace publico y PDF.
+8. Encuesta -> guarda puntaje y comentario sin pedir nombre.
+9. Admin ve resultados -> aparecen cantidad y promedio.
+10. Admin crea traslado -> aparece en listado.
+11. Admin cambia estado -> el estado nuevo aparece.
+12. Celular -> menu y tablas se adaptan al ancho de pantalla.
