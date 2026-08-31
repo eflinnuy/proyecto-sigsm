@@ -37,7 +37,7 @@ $titulo = 'Portal del Paciente';
         <main class="container py-4">
             <section id="documentos" class="mb-5">
                 <h3 class="fw-bold border-bottom pb-2 mb-4">
-                    <i class="bi bi-file-earmark-medical me-3 text-primary"></i> Documentos e Indicaciones
+                    <i class="me-3 text-primary"></i> Documentos e Indicaciones
                 </h3>
                 <p class="fs-5 mb-4">
                     Seleccione una categoría para consultar los documentos disponibles.
@@ -81,7 +81,7 @@ endforeach;
             <hr class="my-5 border-2 border-secondary opacity-25">
             <section id="encuestas">
                 <h3 class="fw-bold border-bottom pb-2 mb-4">
-                    <i class="bi bi-ui-checks me-3 text-primary"></i> Encuestas de Satisfacción
+                    <i class="me-3 text-primary"></i> Encuestas de Satisfacción
                 </h3>
                 <p class="fs-5 mb-4">
                     Ayúdenos a mejorar. Las respuestas son anónimas.
