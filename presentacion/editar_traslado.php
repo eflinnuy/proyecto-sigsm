@@ -1,4 +1,8 @@
 <?php
+/**
+ * Edición de traslados.
+ * Permite actualizar los datos del traslado seleccionado.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

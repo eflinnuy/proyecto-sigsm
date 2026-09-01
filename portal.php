@@ -1,12 +1,19 @@
 <?php
+/**
+ * Portal público del paciente.
+ * Este archivo consulta únicamente información activa y construye la vista
+ * agrupando los documentos por categoría y mostrando las encuestas activas.
+ */
 require_once __DIR__ . '/logica/funciones.php';
 require_once __DIR__ . '/datos/DocumentoDAO.php';
 require_once __DIR__ . '/datos/EncuestaDAO.php';
 require_once __DIR__ . '/datos/conexion.php';
+// Capa de acceso a datos: obtiene únicamente contenido que el paciente puede consultar.
 $documentoDAO = new DocumentoDAO($conexion);
 $encuestaDAO = new EncuestaDAO($conexion);
 $documentos = $documentoDAO->listarActivos();
 $encuestas = $encuestaDAO->activas();
+// Agrupamos los documentos por categoría para construir el acordeón del portal.
 $porCategoria = [];
 foreach ($documentos as $doc) {
     $porCategoria[$doc['categoria_id']]['nombre'] = $doc['categoria'];
@@ -35,6 +42,7 @@ $titulo = 'Portal del Paciente';
             </p>
         </header>
         <main class="container py-4">
+            <!-- Sección pública de documentos e indicaciones. -->
             <section id="documentos" class="mb-5">
                 <h3 class="fw-bold border-bottom pb-2 mb-4">
                     <i class="me-3 text-primary"></i> Documentos e Indicaciones
@@ -43,20 +51,20 @@ $titulo = 'Portal del Paciente';
                     Seleccione una categoría para consultar los documentos disponibles.
                 </p>
                 <?php
-if (!$documentos) :
- ?>
+                    if (!$documentos) :
+                ?>
                 <div class="alert alert-info">
                     Actualmente no hay documentos disponibles.
                 </div>
                 <?php
-endif;
- ?>
+                    endif;
+                ?>
                 <div class="accordion" id="acordeonDocumentos">
                     <?php
-$n = 0;
-foreach ($porCategoria as $cat) : $n++;
-$id = 'cat'.$n;
- ?>
+                        $n = 0;
+                        foreach ($porCategoria as $cat) : $n++;
+                        $id = 'cat'.$n;
+                    ?>
                     <div class="accordion-item mb-3 card-accesible">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $id ?>">
@@ -66,19 +74,20 @@ $id = 'cat'.$n;
                         <div id="<?= $id ?>" class="accordion-collapse collapse" data-bs-parent="#acordeonDocumentos">
                             <div class="list-group list-group-flush">
                                 <?php
-foreach ($cat['documentos'] as $doc) :
- ?> <a href="presentacion/ver_publico.php?id=<?= (int)$doc['id'] ?>" class="list-group-item list-group-item-action"> <i class="bi bi-file-text me-2 text-muted"></i> <?= limpiar($doc['titulo']) ?></a> <?php
-endforeach;
- ?>
+                                    foreach ($cat['documentos'] as $doc) :
+                                ?><a href="presentacion/ver_publico.php?id=<?= (int)$doc['id'] ?>" class="list-group-item list-group-item-action"> <i class="bi bi-file-text me-2 text-muted"></i> <?= limpiar($doc['titulo']) ?></a> <?php
+                    endforeach;
+                    ?>
                             </div>
                         </div>
                     </div>
                     <?php
-endforeach;
- ?>
+                    endforeach;
+                    ?>
                 </div>
             </section>
             <hr class="my-5 border-2 border-secondary opacity-25">
+            <!-- Sección pública de encuestas de satisfacción. -->
             <section id="encuestas">
                 <h3 class="fw-bold border-bottom pb-2 mb-4">
                     <i class="me-3 text-primary"></i> Encuestas de Satisfacción
@@ -88,12 +97,18 @@ endforeach;
                 </p>
                 <div class="d-grid gap-3">
                     <?php
-foreach ($encuestas as $e) :
- ?> <a class="btn btn-accesible d-flex justify-content-between align-items-center" href="presentacion/responder_encuesta.php?id=<?= (int)$e['id'] ?>"> <span> <?= limpiar($e['nombre']) ?></span> <i class="bi bi-pencil-square fs-3"></i></a> <?php
-endforeach;
- ?> <?php
-if (!$encuestas) :
- ?>
+                foreach ($encuestas as $e) :
+                    ?>
+                        <a class="btn btn-accesible d-flex justify-content-between align-items-center" href="presentacion/responder_encuesta.php?id=<?= (int)$e['id'] ?>">
+                            <span> <?= limpiar($e['nombre']) ?></span>
+                            <i class="bi bi-pencil-square fs-3"></i>
+                        </a>
+                    <?php
+                        endforeach;
+                    ?>
+                    <?php
+                        if (!$encuestas) :
+                    ?>
                     <div class="alert alert-secondary">
                         No hay encuestas activas en este momento.
                     </div>

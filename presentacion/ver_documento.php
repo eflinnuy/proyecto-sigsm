@@ -1,4 +1,7 @@
 <?php
+/**
+ * Visualización de un documento desde el área administrativa.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 proteger();
 require_once __DIR__ . '/../datos/conexion.php';

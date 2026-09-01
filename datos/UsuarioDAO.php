@@ -1,4 +1,9 @@
 <?php
+/**
+ * Data Access Object (DAO) de usuarios.
+ * La consulta devuelve solamente usuarios activos para el proceso
+ * de autenticación.
+ */
 class UsuarioDAO {
     public function __construct(private PDO $conexion) {
     }

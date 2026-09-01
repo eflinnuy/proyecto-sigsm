@@ -1,4 +1,8 @@
 <?php
+/**
+ * Data Access Object (DAO) de encuestas.
+ * Centraliza consultas, administración de estados y registro de respuestas.
+ */
 class EncuestaDAO {
     public function __construct(private PDO $conexion) {
     }

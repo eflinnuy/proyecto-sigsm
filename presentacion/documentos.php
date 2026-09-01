@@ -1,4 +1,9 @@
 <?php
+/**
+ * Administración de documentos.
+ * Presenta el listado y las acciones disponibles para crear, editar
+ * o desactivar documentos.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

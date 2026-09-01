@@ -1,4 +1,8 @@
 <?php
+/**
+ * Baja lógica de documentos.
+ * No elimina físicamente el registro: cambia su estado activo a 0.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

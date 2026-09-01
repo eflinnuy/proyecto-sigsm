@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edición de documentos.
+ * Carga el registro seleccionado, valida los cambios y actualiza
+ * la información mediante el DAO.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

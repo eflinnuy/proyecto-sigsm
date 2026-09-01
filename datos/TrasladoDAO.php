@@ -1,4 +1,8 @@
 <?php
+/**
+ * Data Access Object (DAO) de traslados.
+ * Centraliza las operaciones de consulta, alta, modificación y conteo.
+ */
 class TrasladoDAO {
     public function __construct(private PDO $conexion) {
     }

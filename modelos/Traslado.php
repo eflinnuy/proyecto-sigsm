@@ -1,4 +1,8 @@
 <?php
+/**
+ * Modelo simple de Traslado.
+ * Contiene los datos mínimos de un traslado y su estado inicial.
+ */
 class Traslado {
     public string $paciente;
     public string $origen;

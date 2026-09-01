@@ -1,4 +1,8 @@
 <?php
+/**
+ * Respuesta pública de una encuesta.
+ * Solo permite responder encuestas que se encuentren activas.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? $_POST['encuesta_id'] ?? 0);

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Configuración y apertura de la conexión MySQL mediante PDO.
+ * ERRMODE_EXCEPTION permite que los errores de persistencia puedan
+ * ser detectados por las capas superiores.
+ */
 $servidor = 'localhost';
 $base = 'sigsm';
 $usuarioBD = 'root';

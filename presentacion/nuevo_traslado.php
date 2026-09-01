@@ -1,4 +1,9 @@
 <?php
+/**
+ * Alta de traslados.
+ * Recibe los datos del formulario y delega la validación/persistencia
+ * a las capas correspondientes.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

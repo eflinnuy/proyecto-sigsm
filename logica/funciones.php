@@ -1,4 +1,9 @@
 <?php
+/**
+ * Funciones auxiliares comunes.
+ * Incluye escape de salida HTML y el mecanismo de mensajes de sesión
+ * utilizado entre redirecciones.
+ */
 require_once __DIR__.'/autenticacion.php';
 function limpiar($t) : string {
     return htmlspecialchars($t ?? '', ENT_QUOTES, 'UTF-8');

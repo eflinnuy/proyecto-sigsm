@@ -1,4 +1,8 @@
 <?php
+/**
+ * Administración de encuestas.
+ * Muestra las encuestas configuradas y permite gestionar su estado.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

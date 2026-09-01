@@ -1,4 +1,8 @@
 <?php
+/**
+ * Pantalla de acceso del personal.
+ * Si ya existe una sesión activa, evita volver a mostrar el formulario.
+ */
 require_once __DIR__.'/../logica/funciones.php';
 iniciarSesion();
 if (isset($_SESSION['usuario_id'])) {
@@ -8,6 +12,7 @@ if (isset($_SESSION['usuario_id'])) {
 $titulo = 'Acceso administrativo';
 require __DIR__.'/vistas/encabezado.php';
  ?>
+<!-- Formulario de autenticación del personal. -->
 <section class="tarjeta login">
     <h1>
         Acceso del personal
@@ -29,6 +34,7 @@ require __DIR__.'/vistas/encabezado.php';
         </button>
     </form>
     <?php
+// El parámetro error se utiliza únicamente para mostrar un mensaje genérico.
 if (isset($_GET['error'])) :
  ?>
     <div class="mensaje error">

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Reglas de negocio relacionadas con traslados.
+ * La validación comprueba la presencia de los datos obligatorios antes
+ * de solicitar al DAO la persistencia del registro.
+ */
 require_once __DIR__.'/../datos/conexion.php';
 require_once __DIR__.'/../datos/TrasladoDAO.php';
 require_once __DIR__.'/funciones.php';

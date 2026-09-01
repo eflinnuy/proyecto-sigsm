@@ -1,4 +1,9 @@
 <?php
+/**
+ * Alta de documentos.
+ * Valida los datos recibidos y utiliza la capa de acceso a datos para
+ * guardar el nuevo documento.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';

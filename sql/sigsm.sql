@@ -18,7 +18,12 @@ CREATE TABLE usuarios (
 
     rol ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
 
-    activo TINYINT(1) NOT NULL DEFAULT 1
+    activo TINYINT(1) NOT NULL DEFAULT 1,
+
+    -- Restricciones de negocio: se evita guardar datos textuales vacíos
+    -- y se limita el indicador de actividad a los valores 0/1.
+    CONSTRAINT chk_usuarios_nombre CHECK (CHAR_LENGTH(TRIM(nombre)) >= 2),
+    CONSTRAINT chk_usuarios_activo CHECK (activo IN (0,1))
 
 );
 
@@ -26,7 +31,10 @@ CREATE TABLE categorias (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
-    nombre VARCHAR(100) NOT NULL UNIQUE
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+
+    -- Una categoría debe contener texto significativo.
+    CONSTRAINT chk_categorias_nombre CHECK (CHAR_LENGTH(TRIM(nombre)) >= 2)
 
 );
 
@@ -46,7 +54,12 @@ CREATE TABLE documentos (
 
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY(categoria_id) REFERENCES categorias(id)
+    FOREIGN KEY(categoria_id) REFERENCES categorias(id),
+
+    -- Reglas de negocio que no se deducen de PK/FK/UNIQUE.
+    CONSTRAINT chk_documentos_titulo CHECK (CHAR_LENGTH(TRIM(titulo)) >= 3),
+    CONSTRAINT chk_documentos_archivo CHECK (CHAR_LENGTH(TRIM(archivo)) >= 1),
+    CONSTRAINT chk_documentos_activo CHECK (activo IN (0,1))
 
 );
 
@@ -54,7 +67,9 @@ CREATE TABLE servicios (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
-    nombre VARCHAR(100) NOT NULL UNIQUE
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+
+    CONSTRAINT chk_servicios_nombre CHECK (CHAR_LENGTH(TRIM(nombre)) >= 2)
 
 );
 
@@ -68,7 +83,10 @@ CREATE TABLE encuestas_config (
 
     activa TINYINT(1) NOT NULL DEFAULT 1,
 
-    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT chk_encuestas_config_nombre CHECK (CHAR_LENGTH(TRIM(nombre)) >= 3),
+    CONSTRAINT chk_encuestas_config_activa CHECK (activa IN (0,1))
 
 );
 
@@ -84,7 +102,10 @@ CREATE TABLE encuestas (
 
     creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY(encuesta_id) REFERENCES encuestas_config(id)
+    FOREIGN KEY(encuesta_id) REFERENCES encuestas_config(id),
+
+    -- Regla de negocio: las encuestas utilizan una escala de 1 a 5.
+    CONSTRAINT chk_encuestas_puntaje CHECK (puntaje BETWEEN 1 AND 5)
 
 );
 
@@ -110,9 +131,67 @@ CREATE TABLE traslados (
 
     estado VARCHAR(40) NOT NULL DEFAULT 'Solicitado',
 
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Reglas de negocio: campos obligatorios no pueden ser solo espacios,
+    -- el estado debe pertenecer al flujo definido y la llegada no puede
+    -- ocurrir antes que la salida.
+    CONSTRAINT chk_traslados_paciente CHECK (CHAR_LENGTH(TRIM(paciente)) >= 2),
+    CONSTRAINT chk_traslados_chofer CHECK (CHAR_LENGTH(TRIM(chofer)) >= 2),
+    CONSTRAINT chk_traslados_enfermero CHECK (CHAR_LENGTH(TRIM(enfermero)) >= 2),
+    CONSTRAINT chk_traslados_origen CHECK (CHAR_LENGTH(TRIM(origen)) >= 2),
+    CONSTRAINT chk_traslados_destino CHECK (CHAR_LENGTH(TRIM(destino)) >= 2),
+    CONSTRAINT chk_traslados_vehiculo CHECK (vehiculo IS NULL OR CHAR_LENGTH(TRIM(vehiculo)) >= 2),
+    CONSTRAINT chk_traslados_estado CHECK (estado IN ('Solicitado','En camino','Realizado','Cancelado')),
+    CONSTRAINT chk_traslados_fechas CHECK (salida IS NULL OR llegada IS NULL OR llegada >= salida)
 
 );
+
+/*
+===============================================================================
+RESTRICCIONES NO ESTRUCTURALES / REGLAS DE NEGOCIO
+===============================================================================
+Estas restricciones representan condiciones del dominio que van más allá de
+la identidad o relación entre tablas. Se implementan mediante CHECK para que
+la base de datos también proteja la integridad cuando los datos se insertan
+fuera de la aplicación PHP.
+
+1. Usuarios
+   - nombre debe contener al menos 2 caracteres no vacíos.
+   - activo solo admite 0 o 1.
+
+2. Categorías y servicios
+   - nombre debe contener al menos 2 caracteres significativos.
+
+3. Documentos
+   - título debe contener al menos 3 caracteres.
+   - archivo no puede estar vacío.
+   - activo solo admite 0 o 1.
+
+4. Configuración de encuestas
+   - nombre debe contener al menos 3 caracteres significativos.
+   - activa solo admite 0 o 1.
+
+5. Respuestas de encuestas
+   - puntaje debe estar entre 1 y 5.
+
+6. Traslados
+   - paciente, chofer, enfermero, origen y destino deben contener texto
+     significativo.
+   - vehículo, cuando se informa, no puede estar compuesto solo por espacios.
+   - estado queda limitado al flujo: Solicitado, En camino, Realizado o
+     Cancelado.
+   - si se informan salida y llegada, llegada no puede ser anterior a salida.
+
+Estas reglas complementan las restricciones estructurales existentes
+(PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, ENUM y DEFAULT).
+
+Compatibilidad:
+Las restricciones CHECK son aplicadas por MySQL 8.0.16+ y por versiones
+modernas de MariaDB. En motores antiguos que no las ejecuten, las validaciones
+de PHP continúan siendo necesarias y deben mantenerse.
+===============================================================================
+*/
 
 -- Contraseña de prueba: 1234. 
 INSERT INTO usuarios(nombre,usuario,clave,rol) VALUES

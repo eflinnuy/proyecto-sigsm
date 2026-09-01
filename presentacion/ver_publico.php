@@ -1,4 +1,8 @@
 <?php
+/**
+ * Visualización pública de un documento activo.
+ * El identificador recibido se convierte a entero antes de consultarlo.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? 0);

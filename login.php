@@ -1,4 +1,9 @@
 <?php
+/**
+ * Punto de entrada del proceso de autenticación.
+ * Recibe las credenciales, valida el método HTTP y delega la comprobación
+ * de usuario/contraseña a la capa de lógica.
+ */
 require __DIR__ . '/logica/autenticacion.php';
 iniciarSesion();
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

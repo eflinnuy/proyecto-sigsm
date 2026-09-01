@@ -1,4 +1,9 @@
 <?php
+/**
+ * Data Access Object (DAO) de documentos.
+ * Encapsula las consultas SQL de documentos y categorías, manteniendo
+ * separada la persistencia de la presentación.
+ */
 class DocumentoDAO {
     public function __construct(private PDO $conexion) {
     }

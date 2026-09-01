@@ -1,4 +1,9 @@
 <?php
+/**
+ * Administración de traslados.
+ * Permite consultar y gestionar los registros de traslado desde el
+ * panel administrativo.
+ */
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';
