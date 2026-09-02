@@ -79,12 +79,16 @@ $d = $dato ?: ['paciente' => '', 'chofer' => '', 'enfermero' => '', 'vehiculo' =
             Estado
         </label>
         <select name="estado">
-            <?php
-foreach (['Solicitado', 'Preparando', 'En camino', 'Llegó', 'Regresando', 'Finalizado'] as $e) :
- ?> <option <?= $d['estado'] === $e ? 'selected' : '' ?>> <?= $e ?></option> <?php
-endforeach;
- ?>
-        </select>
+    <?php
+    foreach (['Solicitado', 'En camino', 'Realizado', 'Cancelado'] as $e) :
+    ?>
+        <option <?= $d['estado'] === $e ? 'selected' : '' ?>>
+            <?= $e ?>
+        </option>
+    <?php
+    endforeach;
+    ?>
+</select>
         <button>
             Guardar
         </button>
