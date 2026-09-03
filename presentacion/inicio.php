@@ -61,7 +61,7 @@ require __DIR__ . '/vistas/encabezado.php';
     <p>
         Esta es la página que puede abrir el paciente sin usuario ni contraseña.
     </p>
-    <a class="boton" href="portal.php" target="_blank"> Abrir portal</a>
+    <a class="boton" href="../portal.php" target="_blank">Abrir portal</a>
 </div>
 <?php
 require __DIR__ . '/vistas/pie.php';
