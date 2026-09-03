@@ -18,7 +18,12 @@ require_once __DIR__.'/../../logica/funciones.php';
 if (isset($_SESSION['usuario_id'])) :
  ?>
                 <nav>
-                    <a href="inicio.php"> Inicio</a> <a href="documentos.php"> Documentos</a> <a href="encuestas_admin.php"> Encuestas</a> <a href="ambulancias.php"> Traslados</a> <a href="../portal.php" target="_blank"> Portal paciente</a> <a href="../salir.php"> Salir</a>
+                 <a class="boton" href="inicio.php">Inicio</a>
+                 <a class="boton" href="documentos.php" target="_blank">Documentos</a> 
+                 <a class="boton" href="encuestas_admin.php">Encuestas</a> 
+                 <a class="boton" href="ambulancias.php">Traslados</a> 
+                 <a class="boton" href="../portal.php" target="_blank">Abrir portal</a> 
+                 <a class="boton" href="../salir.php">Salir</a>
                 </nav>
                 <?php
 endif;
