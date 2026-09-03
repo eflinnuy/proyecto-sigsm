@@ -13,5 +13,5 @@ try {
     $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e) {
-    die('No se pudo conectar con la base de datos. Revisa datos/conexion.php y el SQL.');
+    die('No se puede conectar con la base de datos. Revisa datos/conexion.php y el SQL.');
 }
