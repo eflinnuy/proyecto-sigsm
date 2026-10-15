@@ -1,0 +1,25 @@
+services:
+eflinn_app:
+  build:
+    context: .
+    dockerfile: Dockerfile
+  container_name: eflinn_app
+  ports:
+    - "3500:80"
+  depends_on:
+    - eflinn_db
+  networks:
+    - eflinn_network
+eflinn_db:
+  image: mysql:8.0
+  container_name: eflinn_db
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: sigsm
+  ports:
+    - "33060:3306"
+  networks:
+    - eflinn_network
+  volumes:
+    - db-volume:/var/lib/mysql
+    - ./sql/sigsm.sql:/docker-entrypoint-initdb.d/sigsm.sql
