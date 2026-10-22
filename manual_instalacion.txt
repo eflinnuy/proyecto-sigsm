@@ -9,5 +9,3 @@ MANUAL DE INSTALACIÓN - SIGSM
 Usuarios de prueba:
 admin / 1234
 usuario / 1234
-
-prueba
