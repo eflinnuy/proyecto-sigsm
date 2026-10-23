@@ -3,6 +3,7 @@
  * Visualización de un documento desde el área administrativa.
  */
 require_once __DIR__ . '/../logica/funciones.php';
+require_once __DIR__ . '/../logica/generador_qr.php';
 proteger();
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? 0);
@@ -11,6 +12,7 @@ $s->execute([$id]);
 $d = $s->fetch(PDO::FETCH_ASSOC);
 if (!$d) die('Documento no encontrado.');
 $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/ver_publico.php?id='.$id;
+$qrSvg = generarQrSvg($url);
 $titulo = $d['titulo'];
 require __DIR__ . '/vistas/encabezado.php';
  ?>
@@ -23,11 +25,9 @@ require __DIR__ . '/vistas/encabezado.php';
         <?= nl2br(limpiar($d['descripcion'])) ?>
     </p>
     <div class="qr">
-        <div class="cuadro-qr">
-            QR
-        </div>
+        <img class="imagen-qr" src="<?= limpiar($qrSvg) ?>" alt="Código QR para abrir <?= limpiar($d['titulo']) ?>">
         <p>
-            <b> QR simulado</b> <br> El paciente puede escanear un QR que lleve a esta dirección:
+            <b>Acceso para pacientes</b><br>Escanee este código con la cámara del celular para abrir el documento.
         </p>
         <input readonly value="<?= limpiar($url) ?>" onclick="this.select()">
     </div>
