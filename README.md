@@ -59,11 +59,31 @@ Si las credenciales de MySQL son diferentes a las utilizadas por defecto, modifi
 datos/conexion.php
 ```
 
-### 4. Iniciar el sistema
+### 4. Instalar dependencias PHP
+
+Desde la carpeta `sigsm`, ejecutar:
+
+```bash
+composer install
+```
+
+Esto instala la biblioteca PHP que genera los códigos QR en formato SVG.
+
+### 5. Iniciar el sistema
 
 Con Apache y MySQL ejecutándose desde XAMPP, acceder a:
 
 **http://localhost/sigsm/**
+
+### Ejecutar con Docker
+
+Desde la carpeta `sigsm`, ejecutar:
+
+```bash
+docker compose up --build
+```
+
+La aplicación quedará disponible en **http://localhost:3500/**. Docker inicializa la base de datos con `sql/sigsm.sql` al crear el volumen por primera vez. Para cambiar las credenciales de la base de datos, definir las variables `MYSQL_ROOT_PASSWORD` y `SIGSM_DB_PASSWORD` antes de iniciar Compose.
 
 ---
 
@@ -104,4 +124,3 @@ Cada capa tiene una responsabilidad específica, permitiendo mantener una estruc
   <strong>EFLINN</strong><br>
   Tecnología para problemas reales.
 </p>
-x
