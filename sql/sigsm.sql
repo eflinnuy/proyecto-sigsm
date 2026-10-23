@@ -3,9 +3,8 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE sigsm;
-
 -- ============================================================
--- LIMPIEZA DE OBJETOS ANTERIORES
+-- VERIFICAMOS SI EXISTEN TABLAS Y VISTAS ANTERIORES Y LAS ELIMINAMOS
 -- ============================================================
 
 DROP VIEW IF EXISTS resumen_encuestas;
@@ -241,55 +240,6 @@ CREATE TABLE traslados (
 
 );
 
-
--- ============================================================
--- RESTRICCIONES NO ESTRUCTURALES / REGLAS DE NEGOCIO
--- ============================================================
-
-/*
-Estas restricciones representan condiciones del dominio que
-van más allá de la identidad o relación entre tablas.
-
-Se implementan mediante CHECK para que la base de datos
-también proteja la integridad cuando los datos se insertan
-fuera de la aplicación PHP.
-
-1. Usuarios
-   - nombre debe contener al menos 2 caracteres no vacíos.
-   - activo solo admite 0 o 1.
-
-2. Categorías y servicios
-   - nombre debe contener al menos 2 caracteres significativos.
-
-3. Documentos
-   - título debe contener al menos 3 caracteres.
-   - archivo no puede estar vacío.
-   - activo solo admite 0 o 1.
-
-4. Configuración de encuestas
-   - nombre debe contener al menos 3 caracteres significativos.
-   - activa solo admite 0 o 1.
-
-5. Respuestas de encuestas
-   - puntaje debe estar entre 1 y 5.
-
-6. Traslados
-   - paciente, chofer, enfermero, origen y destino deben contener
-     texto significativo.
-   - vehículo, cuando se informa, no puede estar compuesto solo
-     por espacios.
-   - estado queda limitado al flujo:
-     Solicitado, En camino, Realizado o Cancelado.
-   - si se informan salida y llegada, llegada no puede ser
-     anterior a salida.
-*/
-
-
--- ============================================================
--- USUARIOS DE PRUEBA
--- Contraseña: 1234
--- ============================================================
-
 INSERT INTO usuarios(nombre, usuario, clave, rol) VALUES
 
 (
@@ -430,77 +380,77 @@ INSERT INTO documentos(
     'Indicaciones de interrupción voluntaria del embarazo',
     30,
     'Información para el paciente sobre interrupción voluntaria del embarazo.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Prostatectomía radical - indicaciones e información para el paciente',
     38,
     'Indicaciones e información para pacientes sometidos a prostatectomía radical.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Preparación para estudios imagenológicos',
     43,
     'Información para preparar al paciente antes de un estudio imagenológico.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Estudios diagnósticos con pertecneciato',
     41,
     'Información para pacientes sobre estudios diagnósticos con pertecneciato.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Información sobre Centellograma de perfusión miocárdica',
     41,
     'Información para el paciente sobre el centellograma de perfusión miocárdica.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Indicaciones ecocardiograma con dobutamina',
     5,
     'Indicaciones para el paciente que realizará un ecocardiograma con dobutamina.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Indicaciones para pacientes en tratamiento con warfarina',
     5,
     'Indicaciones para pacientes en tratamiento con warfarina.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Indicaciones ecocardiograma transesofágico',
     5,
     'Indicaciones para pacientes que realizarán un ecocardiograma transesofágico.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Pauta para pacientes ostomizados',
     15,
     'Cuidados y recomendaciones para pacientes ostomizados.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Prevención de infecciones',
     18,
     'Recomendaciones generales para prevenir infecciones.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 ),
 
 (
     'Plan de alta de enfermería',
     1,
     'Indicaciones para continuar los cuidados luego del alta.',
-    'doc_6a985e11a3723.pdf'
+    'ejemplo.pdf'
 );
 
 
