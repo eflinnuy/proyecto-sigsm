@@ -1,25 +1,46 @@
 services:
-eflinn_app:
-  build:
-    context: .
-    dockerfile: Dockerfile
-  container_name: eflinn_app
-  ports:
-    - "3500:80"
-  depends_on:
-    - eflinn_db
-  networks:
-    - eflinn_network
-eflinn_db:
-  image: mysql:8.0
-  container_name: eflinn_db
-  environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: sigsm
-  ports:
-    - "33060:3306"
-  networks:
-    - eflinn_network
-  volumes:
-    - db-volume:/var/lib/mysql
-    - ./sql/sigsm.sql:/docker-entrypoint-initdb.d/sigsm.sql
+  eflinn_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eflinn_app
+    ports:
+      - "3500:80"
+    environment:
+      DB_HOST: eflinn_db
+      DB_NAME: sigsm
+      DB_USER: sigsm_app
+      DB_PASSWORD: ${SIGSM_DB_PASSWORD:-sigsm_local}
+    depends_on:
+      eflinn_db:
+        condition: service_healthy
+    networks:
+      - eflinn_network
+
+  eflinn_db:
+    image: mysql:8.0
+    container_name: eflinn_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: sigsm
+      MYSQL_USER: sigsm_app
+      MYSQL_PASSWORD: ${SIGSM_DB_PASSWORD:-sigsm_local}
+    ports:
+      - "33060:3306"
+    networks:
+      - eflinn_network
+    volumes:
+      - db-volume:/var/lib/mysql
+      - ./sql/sigsm.sql:/docker-entrypoint-initdb.d/sigsm.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+networks:
+  eflinn_network:
+    driver: bridge
+
+volumes:
+  db-volume:
