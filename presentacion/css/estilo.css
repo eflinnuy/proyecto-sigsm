@@ -168,17 +168,13 @@ th {
     background: #f4f7f8;
     border-radius: 10px;
 }
-.cuadro-qr {
-    width: 130px;
-    height: 130px;
-    border: 8px solid #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 25px;
-    background: repeating-linear-gradient(45deg,#fff 0 8px,#222 8px 12px);
+.imagen-qr {
+    display: block;
+    width: min(120px, 38vw);
+    max-width: 100%;
+    height: auto;
     margin-bottom: 12px;
+    background: white;
 }
 .estado {
     font-weight: bold;
