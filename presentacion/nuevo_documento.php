@@ -7,8 +7,10 @@
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';
-$categorias = $conexion->query('SELECT * FROM categorias ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);
+require_once __DIR__ . '/../logica/documentos.php';
+$categorias = $pdo->query('SELECT * FROM categorias ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    validarCsrf();
     $tituloDoc = trim($_POST['titulo'] ?? '');
     $cat = (int)($_POST['categoria_id'] ?? 0);
     $descripcion = trim($_POST['descripcion'] ?? '');
@@ -18,13 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mensaje('Selecciona un archivo PDF.', 'error');
     } else {
         $ext = strtolower(pathinfo($_FILES['archivo']['name'], PATHINFO_EXTENSION));
-        if ($ext !== 'pdf' || $_FILES['archivo']['size']>5000000) {
+        if (!validarPdfSubido($_FILES['archivo'])) {
             mensaje('El archivo debe ser PDF y pesar menos de 5 MB.', 'error');
         } else {
-            $nombre = uniqid('doc_').'.pdf';
+            $nombre = 'doc_'.bin2hex(random_bytes(16)).'.pdf';
             $ruta = '../documentos/'.$nombre;
             if (move_uploaded_file($_FILES['archivo']['tmp_name'], $ruta)) {
-                $s = $conexion->prepare('INSERT INTO documentos(titulo,categoria_id,descripcion,archivo) VALUES(?,?,?,?)');
+                $s = $pdo->prepare('INSERT INTO documentos(titulo,categoria_id,descripcion,archivo) VALUES(?,?,?,?)');
                 $s->execute([$tituloDoc, $cat, $descripcion, $nombre]);
                 mensaje('Documento guardado.');
                 header('Location: documentos.php');
@@ -41,6 +43,7 @@ require __DIR__ . '/vistas/encabezado.php';
         Nuevo documento
     </h1>
     <form method="post" enctype="multipart/form-data">
+        <?= campoCsrf() ?>
         <label>
             Título
         </label>

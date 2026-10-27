@@ -6,21 +6,34 @@
 require_once __DIR__ . '/../logica/funciones.php';
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? $_POST['encuesta_id'] ?? 0);
-$s = $conexion->prepare("SELECT * FROM encuestas_config WHERE id=? AND activa=1");
+if (empty($_SESSION['survey_token'])) $_SESSION['survey_token'] = bin2hex(random_bytes(32));
+$s = $pdo->prepare("SELECT * FROM encuestas_config WHERE id=? AND activa=1");
 $s->execute([$id]);
 $encuesta = $s->fetch(PDO::FETCH_ASSOC);
 if (!$encuesta) die('Encuesta no encontrada.');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $punt = (int)($_POST['puntaje'] ?? 0);
+    validarCsrf();
+    $envio = $_POST['survey_token'] ?? '';
+    if (!is_string($envio) || !hash_equals($_SESSION['survey_token'], $envio)) { http_response_code(409); exit('La respuesta ya fue enviada o el formulario venció.'); }
+    $punt = filter_var($_POST['puntaje'] ?? null, FILTER_VALIDATE_INT);
+    $punt = $punt === false ? 0 : $punt;
     $coment = trim($_POST['comentario'] ?? '');
+    if (mb_strlen($coment, 'UTF-8') > 500) $coment = '';
     if ($punt<1 || $punt>5) {
         mensaje('Seleccione una puntuación.', 'error');
     }
     else {
-        $s = $conexion->prepare('INSERT INTO encuestas(encuesta_id,puntaje,comentario) VALUES(?,?,?)');
-        $s->execute([$id, $punt, $coment]);
+        try {
+            $s = $pdo->prepare('INSERT INTO encuestas(encuesta_id,puntaje,comentario,token_envio) VALUES(?,?,?,?)');
+            $s->execute([$id, $punt, $coment, $_SESSION['survey_token']]);
+        } catch (PDOException $e) {
+            if (($e->errorInfo[1] ?? 0) !== 1062) throw $e;
+            mensaje('Ya se registró una respuesta desde esta sesión.', 'error');
+            header('Location: ../portal.php'); exit;
+        }
+        $_SESSION['survey_token'] = bin2hex(random_bytes(32));
         mensaje('¡Muchas gracias por su respuesta!');
-        header('Location: portal.php');
+        header('Location: ../portal.php');
         exit;
     }
 }
@@ -44,13 +57,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
                 <form method="post">
                     <input type="hidden" name="encuesta_id" value="<?= $id ?>">
+                    <input type="hidden" name="survey_token" value="<?= limpiar($_SESSION['survey_token']) ?>">
+                    <?= campoCsrf() ?>
                     <label class="form-label fw-bold">
-                        ¿Qué tan conforme está? (1 a 5)
+                        <?= limpiar($encuesta['pregunta'] ?? '¿Cómo valora el servicio recibido?') ?>
                     </label>
                     <select class="form-select form-select-lg mb-3" name="puntaje" required>
                         <option value=""> Elegir...</option> <?php
 for ($i = 1;$i <= 5;$i++) :
- ?> <option value="<?= $i ?>"> <?= $i ?> - <?= $i === 1 ? 'Muy disconforme' : ($i === 5 ? 'Muy conforme' : '') ?></option> <?php
+ ?> <option value="<?= $i ?>"> <?= $i ?> - <?= [1 => 'Muy mala', 2 => 'Mala', 3 => 'Regular', 4 => 'Buena', 5 => 'Muy buena'][$i] ?></option> <?php
 endfor;
  ?>
                     </select>

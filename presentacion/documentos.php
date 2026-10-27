@@ -9,10 +9,10 @@ soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';
 $q = trim($_GET['q'] ?? '');
 if ($q !== '') {
-    $stmt = $conexion->prepare('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.activo=1 AND (d.titulo LIKE ? OR c.nombre LIKE ?) ORDER BY d.id DESC');
+    $stmt = $pdo->prepare('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.activo=1 AND (d.titulo LIKE ? OR c.nombre LIKE ?) ORDER BY d.id DESC');
     $stmt->execute(["%$q%", "%$q%"]);
 } else {
-    $stmt = $conexion->query('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.activo=1 ORDER BY d.id DESC');
+    $stmt = $pdo->query('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.activo=1 ORDER BY d.id DESC');
 }
 $docs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $titulo = 'Documentos';
@@ -87,7 +87,7 @@ foreach ($docs as $d) :
 if ($_SESSION['rol'] === 'admin') :
  ?>
                 <td>
-                    <a href="editar_documento.php?id=<?= $d['id'] ?>"> Editar</a> | <a onclick="return confirm('¿Eliminar este documento?')" href="eliminar_documento.php?id=<?= $d['id'] ?>"> Eliminar</a>
+                    <a href="editar_documento.php?id=<?= $d['id'] ?>"> Editar</a> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button type="submit">Dar de baja</button></form>
                 </td>
                 <?php
 endif;

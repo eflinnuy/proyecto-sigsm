@@ -7,11 +7,11 @@ require_once __DIR__ . '/../logica/generador_qr.php';
 proteger();
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? 0);
-$s = $conexion->prepare('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.id=? AND d.activo=1');
+$s = $pdo->prepare('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.id=? AND d.activo=1');
 $s->execute([$id]);
 $d = $s->fetch(PDO::FETCH_ASSOC);
 if (!$d) die('Documento no encontrado.');
-$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/ver_publico.php?id='.$id;
+$url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].dirname(dirname($_SERVER['PHP_SELF'])).'/portal.php#documentos';
 $qrSvg = generarQrSvg($url);
 $titulo = $d['titulo'];
 require __DIR__ . '/vistas/encabezado.php';
@@ -27,11 +27,11 @@ require __DIR__ . '/vistas/encabezado.php';
     <div class="qr">
         <img class="imagen-qr" src="<?= limpiar($qrSvg) ?>" alt="Código QR para abrir <?= limpiar($d['titulo']) ?>">
         <p>
-            <b>Acceso para pacientes</b><br>Escanee este código con la cámara del celular para abrir el documento.
+            <b>Acceso para pacientes</b><br>Escanee este código con la cámara del celular para abrir el portal público.
         </p>
         <input readonly value="<?= limpiar($url) ?>" onclick="this.select()">
     </div>
-    <a class="boton" href="<?= '../documentos/'.rawurlencode($d['archivo']) ?>" target="_blank"> Abrir PDF</a> <br> <br> <a href="documentos.php"> Volver</a>
+    <a class="boton" href="<?= 'descargar_documento.php?id='.(int)$d['id'] ?>" target="_blank"> Abrir PDF</a> <br> <br> <a href="documentos.php"> Volver</a>
 </section>
 <?php
 require __DIR__ . '/vistas/pie.php';

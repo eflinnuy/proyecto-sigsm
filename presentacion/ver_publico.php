@@ -6,7 +6,7 @@
 require_once __DIR__ . '/../logica/funciones.php';
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? 0);
-$s = $conexion->prepare('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.id=? AND d.activo=1');
+$s = $pdo->prepare('SELECT d.*,c.nombre categoria FROM documentos d JOIN categorias c ON c.id=d.categoria_id WHERE d.id=? AND d.activo=1');
 $s->execute([$id]);
 $d = $s->fetch(PDO::FETCH_ASSOC);
 if (!$d) die('Documento no encontrado.');
@@ -30,7 +30,7 @@ if (!$d) die('Documento no encontrado.');
             <p>
                 <?= nl2br(limpiar($d['descripcion'])) ?>
             </p>
-            <a class="boton" href="../documentos/<?= rawurlencode($d['archivo']) ?>" target="_blank"> Ver documento PDF</a> <a class="boton secundario" href="../portal.php"> Volver al portal</a>
+            <a class="boton" href="descargar_documento.php?id=<?= (int)$d['id'] ?>" target="_blank"> Ver documento PDF</a> <a class="boton secundario" href="../portal.php"> Volver al portal</a>
         </main>
     </body>
 </html>

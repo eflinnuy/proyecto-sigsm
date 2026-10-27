@@ -7,13 +7,15 @@
 require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';
+require_once __DIR__ . '/../logica/documentos.php';
 $id = (int)($_GET['id'] ?? 0);
-$s = $conexion->prepare('SELECT * FROM documentos WHERE id=? AND activo=1');
+$s = $pdo->prepare('SELECT * FROM documentos WHERE id=? AND activo=1');
 $s->execute([$id]);
 $doc = $s->fetch(PDO::FETCH_ASSOC);
 if (!$doc) die('Documento no encontrado.');
-$cats = $conexion->query('SELECT * FROM categorias ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);
+$cats = $pdo->query('SELECT * FROM categorias ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    validarCsrf();
     $t = trim($_POST['titulo'] ?? '');
     $cat = (int) $_POST['categoria_id'];
     $desc = trim($_POST['descripcion'] ?? '');
@@ -22,16 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nuevo = $doc['archivo'];
         if (!empty($_FILES['archivo']['name']) && $_FILES['archivo']['error'] === UPLOAD_ERR_OK) {
             $ext = strtolower(pathinfo($_FILES['archivo']['name'], PATHINFO_EXTENSION));
-            if ($ext !== 'pdf' || $_FILES['archivo']['size']>5000000) mensaje('El nuevo archivo debe ser PDF y menor de 5 MB.', 'error');
+            if (!validarPdfSubido($_FILES['archivo'])) mensaje('El nuevo archivo debe ser PDF y menor de 5 MB.', 'error');
             else {
-                $nuevo = uniqid('doc_').'.pdf';
+                $nuevo = 'doc_'.bin2hex(random_bytes(16)).'.pdf';
                 if (move_uploaded_file($_FILES['archivo']['tmp_name'], '../documentos/'.$nuevo)) {
-                    if (is_file('../documentos/'.$doc['archivo']))@unlink('../documentos/'.$doc['archivo']);
+                    if (is_file('../documentos/'.$doc['archivo'])) @unlink('../documentos/'.$doc['archivo']);
+                } else {
+                    mensaje('No se pudo guardar el nuevo archivo.', 'error');
+                    $nuevo = $doc['archivo'];
                 }
             }
         }
         if (empty($_SESSION['mensaje']) || $_SESSION['mensaje']['tipo'] !== 'error') {
-            $u = $conexion->prepare('UPDATE documentos SET titulo=?,categoria_id=?,descripcion=?,archivo=? WHERE id=?');
+            $u = $pdo->prepare('UPDATE documentos SET titulo=?,categoria_id=?,descripcion=?,archivo=? WHERE id=?');
             $u->execute([$t, $cat, $desc, $nuevo, $id]);
             mensaje('Documento actualizado.');
             header('Location: documentos.php');
@@ -47,6 +52,7 @@ require __DIR__ . '/vistas/encabezado.php';
         Editar documento
     </h1>
     <form method="post" enctype="multipart/form-data">
+        <?= campoCsrf() ?>
         <label>
             Título
         </label>

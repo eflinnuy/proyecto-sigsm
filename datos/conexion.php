@@ -9,8 +9,8 @@ $base = getenv('DB_NAME') ?: 'sigsm';
 $usuarioBD = getenv('DB_USER') ?: 'root';
 $claveBD = getenv('DB_PASSWORD') ?: '';
 try {
-    $conexion = new PDO("mysql:host=$servidor;dbname=$base;charset=utf8mb4", $usuarioBD, $claveBD);
-    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host=$servidor;dbname=$base;charset=utf8mb4", $usuarioBD, $claveBD);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e) {
     die('No se puede conectar con la base de datos. Revisa datos/conexion.php y el SQL.');

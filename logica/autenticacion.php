@@ -11,14 +11,20 @@ require_once __DIR__.'/../datos/conexion.php';
 require_once __DIR__.'/../datos/UsuarioDAO.php';
 // Inicializa la sesión solo cuando todavía no existe una sesión activa.
 function iniciarSesion() : void {
-    if (session_status() === PHP_SESSION_NONE)session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        ini_set('session.use_strict_mode', '1');
+        ini_set('session.cookie_httponly', '1');
+        if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ini_set('session.cookie_secure', '1');
+        session_start();
+    }
 }
 // Busca el usuario activo, verifica el hash de la contraseña y crea la sesión.
 function iniciarSesionUsuario(string $u, string $c) : bool {
-    global $conexion;
-    $p = (new UsuarioDAO($conexion))->buscarPorUsuario($u);
+    global $pdo;
+    $p = (new UsuarioDAO($pdo))->buscarPorUsuario($u);
     if (!$p || !password_verify($c, $p['clave'])) return false;
     session_regenerate_id(true);
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     $_SESSION['usuario_id'] = $p['id'];
     $_SESSION['nombre'] = $p['nombre'];
     $_SESSION['rol'] = $p['rol'];
@@ -36,7 +42,7 @@ function proteger() : void {
 function soloAdmin() : void {
     proteger();
     if ($_SESSION['rol'] !== 'admin') {
-        header('Location: inicio.php');
+        header('Location: ../portal.php');
         exit;
     }
 }

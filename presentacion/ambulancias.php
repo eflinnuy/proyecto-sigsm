@@ -9,10 +9,10 @@ soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';
 $q = trim($_GET['q'] ?? '');
 if ($q) {
-    $s = $conexion->prepare('SELECT * FROM traslados WHERE paciente LIKE ? OR destino LIKE ? OR estado LIKE ? ORDER BY id DESC');
+    $s = $pdo->prepare('SELECT * FROM traslados WHERE paciente LIKE ? OR destino LIKE ? OR estado LIKE ? ORDER BY id DESC');
     $s->execute(["%$q%", "%$q%", "%$q%"]);
 } else {
-    $s = $conexion->query('SELECT * FROM traslados ORDER BY id DESC');
+    $s = $pdo->query('SELECT * FROM traslados ORDER BY id DESC');
 }
 $lista = $s->fetchAll(PDO::FETCH_ASSOC);
 $titulo = 'Traslados';

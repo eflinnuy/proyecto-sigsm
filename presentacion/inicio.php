@@ -8,9 +8,9 @@ require_once __DIR__ . '/../logica/funciones.php';
 soloAdmin();
 require_once __DIR__ . '/../datos/conexion.php';
 // Indicadores principales del sistema.
-$totalDocs = $conexion->query("SELECT COUNT(*) FROM documentos WHERE activo=1")->fetchColumn();
-$totalTras = $conexion->query("SELECT COUNT(*) FROM traslados")->fetchColumn();
-$totalEncuestas = $conexion->query("SELECT COUNT(*) FROM encuestas_config")->fetchColumn();
+$totalDocs = $pdo->query("SELECT COUNT(*) FROM documentos WHERE activo=1")->fetchColumn();
+$totalTras = $pdo->query("SELECT COUNT(*) FROM traslados")->fetchColumn();
+$totalEncuestas = $pdo->query("SELECT COUNT(*) FROM encuestas_config")->fetchColumn();
 $titulo = 'Panel administrativo';
 require __DIR__ . '/vistas/encabezado.php';
  ?>

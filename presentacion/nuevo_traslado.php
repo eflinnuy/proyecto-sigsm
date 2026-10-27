@@ -11,23 +11,24 @@ $id = 0;
 $edit = false;
 $dato = null;
 if ($edit) {
-    $s = $conexion->prepare('SELECT * FROM traslados WHERE id=?');
+    $s = $pdo->prepare('SELECT * FROM traslados WHERE id=?');
     $s->execute([$id]);
     $dato = $s->fetch(PDO::FETCH_ASSOC);
     if (!$dato) die('Traslado no encontrado.');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    validarCsrf();
     $campos = ['paciente', 'chofer', 'enfermero', 'vehiculo', 'origen', 'destino', 'salida', 'llegada', 'estado'];
     $v = [];
     foreach ($campos as $c) $v[$c] = trim($_POST[$c] ?? '');
     if ($v['paciente'] === '' || $v['chofer'] === '' || $v['enfermero'] === '' || $v['origen'] === '' || $v['destino'] === '') mensaje('Completa los datos obligatorios.', 'error');
     else {
         if ($edit) {
-            $s = $conexion->prepare('UPDATE traslados SET paciente=?,chofer=?,enfermero=?,vehiculo=?,origen=?,destino=?,salida=?,llegada=?,estado=? WHERE id=?');
+            $s = $pdo->prepare('UPDATE traslados SET paciente=?,chofer=?,enfermero=?,vehiculo=?,origen=?,destino=?,salida=?,llegada=?,estado=? WHERE id=?');
             $s->execute([$v['paciente'], $v['chofer'], $v['enfermero'], $v['vehiculo'], $v['origen'], $v['destino'], $v['salida'] ?: null, $v['llegada'] ?: null, $v['estado'], $id]);
             mensaje('Traslado actualizado.');
         } else {
-            $s = $conexion->prepare('INSERT INTO traslados(paciente,chofer,enfermero,vehiculo,origen,destino,salida,llegada,estado) VALUES(?,?,?,?,?,?,?,?,?)');
+            $s = $pdo->prepare('INSERT INTO traslados(paciente,chofer,enfermero,vehiculo,origen,destino,salida,llegada,estado) VALUES(?,?,?,?,?,?,?,?,?)');
             $s->execute([$v['paciente'], $v['chofer'], $v['enfermero'], $v['vehiculo'], $v['origen'], $v['destino'], $v['salida'] ?: null, $v['llegada'] ?: null, $v['estado']]);
             mensaje('Traslado guardado.');
         }
@@ -44,6 +45,7 @@ $d = $dato ?: ['paciente' => '', 'chofer' => '', 'enfermero' => '', 'vehiculo' =
         <?= $edit ? 'Editar' : 'Nuevo' ?> traslado
     </h1>
     <form method="post">
+        <?= campoCsrf() ?>
         <label>
             Paciente o elemento *
         </label>

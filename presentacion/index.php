@@ -6,7 +6,7 @@
 require_once __DIR__.'/../logica/funciones.php';
 iniciarSesion();
 if (isset($_SESSION['usuario_id'])) {
-    header('Location: inicio.php');
+    header('Location: ' . (($_SESSION['rol'] ?? '') === 'admin' ? 'inicio.php' : '../portal.php'));
     exit;
 }
 $titulo = 'Acceso administrativo';
@@ -21,6 +21,7 @@ require __DIR__.'/vistas/encabezado.php';
         Ingrese para administrar documentos, encuestas y traslados.
     </p>
     <form action="../login.php" method="post">
+        <?= campoCsrf() ?>
         <label>
             Usuario
         </label>

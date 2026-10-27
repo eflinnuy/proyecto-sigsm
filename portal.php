@@ -9,8 +9,8 @@ require_once __DIR__ . '/datos/DocumentoDAO.php';
 require_once __DIR__ . '/datos/EncuestaDAO.php';
 require_once __DIR__ . '/datos/conexion.php';
 // Capa de acceso a datos: obtiene únicamente contenido que el paciente puede consultar.
-$documentoDAO = new DocumentoDAO($conexion);
-$encuestaDAO = new EncuestaDAO($conexion);
+$documentoDAO = new DocumentoDAO($pdo);
+$encuestaDAO = new EncuestaDAO($pdo);
 $documentos = $documentoDAO->listarActivos();
 $encuestas = $encuestaDAO->activas();
 // Agrupamos los documentos por categoría para construir el acordeón del portal.

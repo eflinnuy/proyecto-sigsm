@@ -3,27 +3,13 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 USE sigsm;
--- ============================================================
--- VERIFICAMOS SI EXISTEN TABLAS Y VISTAS ANTERIORES Y LAS ELIMINAMOS
--- ============================================================
-
-DROP VIEW IF EXISTS resumen_encuestas;
-
-DROP TABLE IF EXISTS
-    encuestas,
-    encuestas_config,
-    traslados,
-    documentos,
-    servicios,
-    categorias,
-    usuarios;
-
+-- Instalación no destructiva: no elimina tablas ni vistas existentes.
 
 -- ============================================================
 -- TABLA: USUARIOS
 -- ============================================================
 
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -53,7 +39,7 @@ CREATE TABLE usuarios (
 -- del paciente.
 -- ============================================================
 
-CREATE TABLE categorias (
+CREATE TABLE IF NOT EXISTS categorias (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -70,7 +56,7 @@ CREATE TABLE categorias (
 -- TABLA: DOCUMENTOS
 -- ============================================================
 
-CREATE TABLE documentos (
+CREATE TABLE IF NOT EXISTS documentos (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -106,7 +92,7 @@ CREATE TABLE documentos (
 -- TABLA: SERVICIOS
 -- ============================================================
 
-CREATE TABLE servicios (
+CREATE TABLE IF NOT EXISTS servicios (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -122,15 +108,19 @@ CREATE TABLE servicios (
 -- TABLA: CONFIGURACION DE ENCUESTAS
 -- ============================================================
 
-CREATE TABLE encuestas_config (
+CREATE TABLE IF NOT EXISTS encuestas_config (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
     nombre VARCHAR(150) NOT NULL,
 
+    pregunta VARCHAR(250) NOT NULL DEFAULT '¿Cómo valora el servicio recibido?',
+
     descripcion VARCHAR(500),
 
     activa TINYINT(1) NOT NULL DEFAULT 1,
+
+    servicio_id INT NULL,
 
     creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -138,7 +128,8 @@ CREATE TABLE encuestas_config (
         CHECK (CHAR_LENGTH(TRIM(nombre)) >= 3),
 
     CONSTRAINT chk_encuestas_config_activa
-        CHECK (activa IN (0,1))
+        CHECK (activa IN (0,1)),
+    CONSTRAINT fk_encuestas_servicio FOREIGN KEY (servicio_id) REFERENCES servicios(id) ON DELETE SET NULL
 
 );
 
@@ -147,7 +138,7 @@ CREATE TABLE encuestas_config (
 -- TABLA: ENCUESTAS
 -- ============================================================
 
-CREATE TABLE encuestas (
+CREATE TABLE IF NOT EXISTS encuestas (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -156,6 +147,8 @@ CREATE TABLE encuestas (
     puntaje TINYINT NOT NULL,
 
     comentario VARCHAR(500),
+
+    token_envio CHAR(64) NULL UNIQUE,
 
     creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -173,7 +166,7 @@ CREATE TABLE encuestas (
 -- TABLA: TRASLADOS
 -- ============================================================
 
-CREATE TABLE traslados (
+CREATE TABLE IF NOT EXISTS traslados (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
 
@@ -240,7 +233,7 @@ CREATE TABLE traslados (
 
 );
 
-INSERT INTO usuarios(nombre, usuario, clave, rol) VALUES
+INSERT IGNORE INTO usuarios(nombre, usuario, clave, rol) VALUES
 
 (
     'Administrador del sistema',
@@ -261,7 +254,7 @@ INSERT INTO usuarios(nombre, usuario, clave, rol) VALUES
 -- CATEGORIAS / SERVICIOS DEL PORTAL DEL PACIENTE
 -- ============================================================
 
-INSERT INTO categorias(nombre) VALUES
+INSERT IGNORE INTO categorias(nombre) VALUES
 
     ('Unidad de Cuidados Paliativos'),
 
@@ -354,7 +347,7 @@ INSERT INTO categorias(nombre) VALUES
 -- SERVICIOS GENERALES DEL SISTEMA
 -- ============================================================
 
-INSERT INTO servicios(nombre) VALUES
+INSERT IGNORE INTO servicios(nombre) VALUES
 
     ('Atención al paciente'),
 
@@ -369,7 +362,7 @@ INSERT INTO servicios(nombre) VALUES
 -- DOCUMENTOS DE EJEMPLO
 -- ============================================================
 
-INSERT INTO documentos(
+INSERT IGNORE INTO documentos(
     titulo,
     categoria_id,
     descripcion,
@@ -458,7 +451,7 @@ INSERT INTO documentos(
 -- CONFIGURACION DE ENCUESTAS
 -- ============================================================
 
-INSERT INTO encuestas_config(
+INSERT IGNORE INTO encuestas_config(
     nombre,
     descripcion,
     activa
@@ -481,7 +474,7 @@ INSERT INTO encuestas_config(
 -- TRASLADO DE PRUEBA
 -- ============================================================
 
-INSERT INTO traslados(
+INSERT IGNORE INTO traslados(
     paciente,
     chofer,
     enfermero,
