@@ -28,7 +28,7 @@ services:
     volumes:
       - ./sql/migracion_encuestas_seguridad.sql:/migracion_encuestas_seguridad.sql:ro
     entrypoint: ["sh", "-c"]
-    command: ["mysql -h eflinn_db -u root -p\"$$MYSQL_ROOT_PASSWORD\" sigsm < /migracion_encuestas_seguridad.sql"]
+    command: ["mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p\"$$MYSQL_ROOT_PASSWORD\" sigsm < /migracion_encuestas_seguridad.sql"]
     networks:
       - eflinn_network
 

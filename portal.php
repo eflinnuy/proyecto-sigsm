@@ -8,6 +8,8 @@ require_once __DIR__ . '/logica/funciones.php';
 require_once __DIR__ . '/datos/DocumentoDAO.php';
 require_once __DIR__ . '/datos/EncuestaDAO.php';
 require_once __DIR__ . '/datos/conexion.php';
+// Iniciar la sesión antes de producir cualquier salida HTML.
+iniciarSesion();
 // Capa de acceso a datos: obtiene únicamente contenido que el paciente puede consultar.
 $documentoDAO = new DocumentoDAO($pdo);
 $encuestaDAO = new EncuestaDAO($pdo);
@@ -42,7 +44,6 @@ $titulo = 'Portal del Paciente';
             </p>
         </header>
         <?php
-        iniciarSesion();
         if (!empty($_SESSION['mensaje'])):
             $mensajePortal = $_SESSION['mensaje'];
             unset($_SESSION['mensaje']);
