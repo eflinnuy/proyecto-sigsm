@@ -19,6 +19,7 @@ services:
 
   eflinn_db:
     image: mysql:8.0
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
     container_name: eflinn_db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
