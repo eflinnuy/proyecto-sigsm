@@ -5,7 +5,7 @@
  * panel administrativo.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloAdmin();
+soloPersonal();
 require_once __DIR__ . '/../datos/conexion.php';
 $q = trim($_GET['q'] ?? '');
 if ($q) {

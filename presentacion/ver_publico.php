@@ -30,7 +30,9 @@ if (!$d) die('Documento no encontrado.');
             <p>
                 <?= nl2br(limpiar($d['descripcion'])) ?>
             </p>
-            <a class="boton" href="descargar_documento.php?id=<?= (int)$d['id'] ?>" target="_blank"> Ver documento PDF</a> <a class="boton secundario" href="../portal.php"> Volver al portal</a>
+            <a class="boton" href="descargar_documento.php?id=<?= (int)$d['id'] ?>" target="_blank">Ver documento PDF</a>
+            <a class="boton secundario" href="descargar_documento.php?id=<?= (int)$d['id'] ?>&amp;descargar=1">Descargar PDF</a>
+            <a class="boton secundario" href="../portal.php">Volver al portal</a>
         </main>
     </body>
 </html>

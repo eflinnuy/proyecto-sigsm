@@ -11,6 +11,7 @@ if (!$doc || !$base || !$file || dirname($file) !== $base || !is_file($file) || 
 }
 header('Content-Type: application/pdf');
 header('X-Content-Type-Options: nosniff');
-header('Content-Disposition: inline; filename="documento.pdf"');
+$disposicion = ($_GET['descargar'] ?? '') === '1' ? 'attachment' : 'inline';
+header('Content-Disposition: '.$disposicion.'; filename="documento.pdf"');
 header('Content-Length: ' . filesize($file));
 readfile($file);

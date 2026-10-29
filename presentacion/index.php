@@ -6,7 +6,8 @@
 require_once __DIR__.'/../logica/funciones.php';
 iniciarSesion();
 if (isset($_SESSION['usuario_id'])) {
-    header('Location: ' . (($_SESSION['rol'] ?? '') === 'admin' ? 'inicio.php' : '../portal.php'));
+    $rolesPanel = ['admin', 'usuario', 'funcionario'];
+    header('Location: ' . (in_array($_SESSION['rol'] ?? '', $rolesPanel, true) ? 'inicio.php' : '../portal.php'));
     exit;
 }
 $titulo = 'Acceso administrativo';
@@ -26,10 +27,11 @@ require __DIR__.'/vistas/encabezado.php';
             Usuario
         </label>
         <input type="text" name="usuario" required maxlength="50">
-        <label>
+        <label for="clave">
             Contraseña
         </label>
-        <input type="password" name="clave" required>
+        <input id="clave" type="password" name="clave" required autocomplete="current-password">
+        <button id="alternar-clave" class="secundario" type="button" aria-controls="clave" aria-pressed="false">Mostrar contraseña</button>
         <button type="submit">
             Ingresar
         </button>
@@ -48,6 +50,15 @@ endif;
         Este acceso es solamente para el personal autorizado.
     </div>
 </section>
+<script>
+document.getElementById('alternar-clave').addEventListener('click', function () {
+    const campo = document.getElementById('clave');
+    const visible = campo.type === 'password';
+    campo.type = visible ? 'text' : 'password';
+    this.textContent = visible ? 'Ocultar contraseña' : 'Mostrar contraseña';
+    this.setAttribute('aria-pressed', String(visible));
+});
+</script>
 <?php
 require __DIR__.'/vistas/pie.php';
  ?>

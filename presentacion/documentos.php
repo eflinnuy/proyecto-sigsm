@@ -5,7 +5,7 @@
  * o desactivar documentos.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloAdmin();
+soloPersonal();
 require_once __DIR__ . '/../datos/conexion.php';
 $q = trim($_GET['q'] ?? '');
 if ($q !== '') {
@@ -87,7 +87,7 @@ foreach ($docs as $d) :
 if ($_SESSION['rol'] === 'admin') :
  ?>
                 <td>
-                    <a href="editar_documento.php?id=<?= $d['id'] ?>"> Editar</a> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button type="submit">Dar de baja</button></form>
+                    <a href="editar_documento.php?id=<?= $d['id'] ?>"> Editar</a><?php if (($_SESSION['rol'] ?? '') === 'admin'): ?> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button type="submit">Dar de baja</button></form><?php endif; ?>
                 </td>
                 <?php
 endif;

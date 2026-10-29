@@ -5,7 +5,7 @@
  * guardar el nuevo documento.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloAdmin();
+soloPersonal();
 require_once __DIR__ . '/../datos/conexion.php';
 require_once __DIR__ . '/../logica/documentos.php';
 $categorias = $pdo->query('SELECT * FROM categorias ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);

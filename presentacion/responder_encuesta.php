@@ -5,8 +5,13 @@
  */
 require_once __DIR__ . '/../logica/funciones.php';
 require_once __DIR__ . '/../datos/conexion.php';
+iniciarSesion();
+
 $id = (int)($_GET['id'] ?? $_POST['encuesta_id'] ?? 0);
-if (empty($_SESSION['survey_token'])) $_SESSION['survey_token'] = bin2hex(random_bytes(32));
+if (empty($_SESSION['survey_token']) || !is_string($_SESSION['survey_token'])) {
+    $_SESSION['survey_token'] = bin2hex(random_bytes(32));
+}
+
 $s = $pdo->prepare("SELECT * FROM encuestas_config WHERE id=? AND activa=1");
 $s->execute([$id]);
 $encuesta = $s->fetch(PDO::FETCH_ASSOC);
@@ -14,7 +19,12 @@ if (!$encuesta) die('Encuesta no encontrada.');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validarCsrf();
     $envio = $_POST['survey_token'] ?? '';
-    if (!is_string($envio) || !hash_equals($_SESSION['survey_token'], $envio)) { http_response_code(409); exit('La respuesta ya fue enviada o el formulario venció.'); }
+    $tokenSesion = $_SESSION['survey_token'] ?? null;
+
+    if (!is_string($tokenSesion) || !is_string($envio) || !hash_equals($tokenSesion, $envio)) {
+        http_response_code(409);
+        exit('La respuesta ya fue enviada o el formulario venció.');
+    }
     $punt = filter_var($_POST['puntaje'] ?? null, FILTER_VALIDATE_INT);
     $punt = $punt === false ? 0 : $punt;
     $coment = trim($_POST['comentario'] ?? '');
@@ -32,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: ../portal.php'); exit;
         }
         $_SESSION['survey_token'] = bin2hex(random_bytes(32));
-        mensaje('¡Muchas gracias por su respuesta!');
+        mensaje('La encuesta fue enviada exitosamente.');
         header('Location: ../portal.php');
         exit;
     }

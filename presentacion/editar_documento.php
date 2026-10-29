@@ -5,7 +5,7 @@
  * la información mediante el DAO.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloAdmin();
+soloPersonal();
 require_once __DIR__ . '/../datos/conexion.php';
 require_once __DIR__ . '/../logica/documentos.php';
 $id = (int)($_GET['id'] ?? 0);

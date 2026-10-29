@@ -41,6 +41,20 @@ $titulo = 'Portal del Paciente';
                 Bienvenido/a. Elija la información que necesita ver.
             </p>
         </header>
+        <?php
+        iniciarSesion();
+        if (!empty($_SESSION['mensaje'])):
+            $mensajePortal = $_SESSION['mensaje'];
+            unset($_SESSION['mensaje']);
+            $tipoAlerta = ($mensajePortal['tipo'] ?? 'bien') === 'error' ? 'danger' : 'success';
+        ?>
+        <div class="container pt-3">
+            <div class="alert alert-<?= $tipoAlerta ?> alert-dismissible fade show" role="alert">
+                <?= limpiar($mensajePortal['texto'] ?? '') ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        </div>
+        <?php endif; ?>
         <main class="container py-4">
             <!-- Sección pública de documentos e indicaciones. -->
             <section id="documentos" class="mb-5">
@@ -75,7 +89,10 @@ $titulo = 'Portal del Paciente';
                             <div class="list-group list-group-flush">
                                 <?php
                                     foreach ($cat['documentos'] as $doc) :
-                                ?><a href="presentacion/ver_publico.php?id=<?= (int)$doc['id'] ?>" class="list-group-item list-group-item-action"> <i class="bi bi-file-text me-2 text-muted"></i> <?= limpiar($doc['titulo']) ?></a> <?php
+                                ?><div class="list-group-item d-flex justify-content-between align-items-center gap-3">
+                                    <a href="presentacion/ver_publico.php?id=<?= (int)$doc['id'] ?>" class="text-decoration-none flex-grow-1"><i class="bi bi-file-text me-2 text-muted"></i><?= limpiar($doc['titulo']) ?></a>
+                                    <a href="presentacion/descargar_documento.php?id=<?= (int)$doc['id'] ?>&amp;descargar=1" class="btn btn-outline-primary btn-sm flex-shrink-0" aria-label="Descargar <?= limpiar($doc['titulo']) ?>"><i class="bi bi-download me-1" aria-hidden="true"></i>Descargar</a>
+                                </div> <?php
                     endforeach;
                     ?>
                             </div>

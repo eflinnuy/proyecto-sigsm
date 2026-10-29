@@ -5,7 +5,7 @@
  * a las capas correspondientes.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloAdmin();
+soloPersonal();
 require_once __DIR__ . '/../datos/conexion.php';
 $id = 0;
 $edit = false;
@@ -83,7 +83,7 @@ $d = $dato ?: ['paciente' => '', 'chofer' => '', 'enfermero' => '', 'vehiculo' =
         </label>
         <select name="estado">
             <?php
-foreach (['Solicitado', 'Preparando', 'En camino', 'Llegó', 'Regresando', 'Finalizado'] as $e) :
+foreach (['Solicitado', 'En camino', 'Realizado', 'Cancelado'] as $e) :
  ?> <option <?= $d['estado'] === $e ? 'selected' : '' ?>> <?= $e ?></option> <?php
 endforeach;
  ?>

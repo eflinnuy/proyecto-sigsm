@@ -4,7 +4,8 @@
  * - iniciarSesion(): inicia la sesión cuando es necesario.
  * - iniciarSesionUsuario(): valida credenciales y crea la sesión.
  * - proteger(): exige una sesión válida.
- * - soloAdmin(): restringe las operaciones administrativas.
+ * - soloPersonal(): permite el acceso al personal autenticado.
+ * - soloAdmin(): restringe las operaciones exclusivas de administradores.
  * - cerrarSesion(): elimina la sesión y sus cookies.
  */
 require_once __DIR__.'/../datos/conexion.php';
@@ -38,12 +39,20 @@ function proteger() : void {
         exit;
     }
 }
-// Agrega la autorización específica para el rol administrador.
-function soloAdmin() : void {
+// Permite el acceso a las funciones del panel a administradores y funcionarios.
+function soloPersonal() : void {
     proteger();
-    if ($_SESSION['rol'] !== 'admin') {
+    if (!in_array($_SESSION['rol'] ?? '', ['admin', 'usuario', 'funcionario'], true)) {
         header('Location: ../portal.php');
         exit;
+    }
+}
+// Restringe operaciones reservadas al administrador, como dar de baja documentos.
+function soloAdmin() : void {
+    proteger();
+    if (($_SESSION['rol'] ?? '') !== 'admin') {
+        http_response_code(403);
+        exit('No tienes permiso para realizar esta operación.');
     }
 }
 // Limpia datos de sesión y elimina la cookie asociada.

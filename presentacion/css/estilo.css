@@ -87,6 +87,22 @@ nav a:hover {
 .secundario {
     background: #65727a;
 }
+.peligro {
+    background: #a83232;
+}
+.acciones-form, .acciones-tabla {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.acciones-tabla form {
+    display: inline-flex;
+}
+.acciones-tabla .boton, .acciones-tabla button {
+    font-size: 14px;
+    padding: 9px 12px;
+}
 form {
     display: flex;
     flex-direction: column;

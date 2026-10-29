@@ -4,7 +4,7 @@
  * Muestra las encuestas configuradas y permite gestionar su estado.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloAdmin();
+soloPersonal();
 require_once __DIR__ . '/../datos/conexion.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validarCsrf();
@@ -37,6 +37,12 @@ $q = trim($_GET['q'] ?? '');
 $sql = 'SELECT e.*,sv.nombre AS servicio,COUNT(r.id) respuestas,ROUND(AVG(r.puntaje),2) promedio,SUM(r.puntaje=1) p1,SUM(r.puntaje=2) p2,SUM(r.puntaje=3) p3,SUM(r.puntaje=4) p4,SUM(r.puntaje=5) p5 FROM encuestas_config e LEFT JOIN servicios sv ON sv.id=e.servicio_id LEFT JOIN encuestas r ON r.encuesta_id=e.id';
 if ($q !== '') { $s=$pdo->prepare($sql.' WHERE e.nombre LIKE ? OR sv.nombre LIKE ? GROUP BY e.id,sv.nombre ORDER BY e.id DESC'); $s->execute(["%$q%","%$q%"]); } else { $s=$pdo->query($sql.' GROUP BY e.id,sv.nombre ORDER BY e.id DESC'); }
 $lista=$s->fetchAll(PDO::FETCH_ASSOC);
+$respuestas = $pdo->query(
+    'SELECT r.creada_en, r.puntaje, r.comentario, e.nombre AS encuesta
+     FROM encuestas r
+     INNER JOIN encuestas_config e ON e.id = r.encuesta_id
+     ORDER BY r.creada_en DESC'
+)->fetchAll(PDO::FETCH_ASSOC);
 $servicios=$pdo->query('SELECT id,nombre FROM servicios ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);
 $titulo = 'Administrar encuestas';
 require __DIR__ . '/vistas/encabezado.php';
@@ -135,6 +141,36 @@ foreach ($lista as $e) :
                 <?php
 endforeach;
  ?>
+            </tbody>
+        </table>
+    </div>
+</section>
+<section class="tarjeta">
+    <h2>Respuestas recibidas</h2>
+    <div class="tabla-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Encuesta</th>
+                    <th>Puntaje</th>
+                    <th>Comentario</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($respuestas as $r): ?>
+                    <tr>
+                        <td><?= limpiar($r['creada_en']) ?></td>
+                        <td><?= limpiar($r['encuesta']) ?></td>
+                        <td><?= (int)$r['puntaje'] ?> de 5</td>
+                        <td><?= limpiar($r['comentario'] ?? '') ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (!$respuestas): ?>
+                    <tr>
+                        <td colspan="4">Todavía no hay respuestas.</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>

@@ -17,9 +17,6 @@ if ($usuario === '' || $clave === '' || !iniciarSesionUsuario($usuario, $clave))
     header('Location: presentacion/index.php?error=1');
     exit;
 }
-if (($_SESSION['rol'] ?? '') === 'admin') {
-    header('Location: presentacion/inicio.php');
-} else {
-    header('Location: portal.php');
-}
+// Todo el personal autorizado entra al panel; los permisos se verifican por acción.
+header('Location: presentacion/inicio.php');
 exit;

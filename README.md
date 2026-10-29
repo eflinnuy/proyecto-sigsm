@@ -129,3 +129,7 @@ Cada capa tiene una responsabilidad específica, permitiendo mantener una estruc
 ## Actualización de seguridad y encuestas
 
 La instalación SQL ya no elimina tablas existentes. Para una instalación nueva, ejecuta `sql/sigsm.sql`. Para actualizar una base SIGSM creada con una versión anterior, ejecuta una sola vez `sql/migracion_encuestas_seguridad.sql`; agrega la pregunta configurable, el servicio asociado y el token de respuesta. En esta copia local, la migración ya fue aplicada. Las respuestas usan escala de 1 a 5, CSRF y token de sesión. Los archivos PDF se sirven a través de `presentacion/descargar_documento.php`, que vuelve a comprobar que el documento siga activo; Apache también bloquea el acceso directo a la carpeta `documentos/`.
+
+## Gestión de funcionarios
+
+Los administradores y funcionarios pueden usar las funciones del panel. El administrador puede además dar de baja documentos; los funcionarios no ven ni pueden ejecutar esa acción. Las cuentas se gestionan desde **Funcionarios** y la baja de una cuenta es lógica para conservar registros relacionados. Esta función utiliza la tabla `usuarios` existente y no necesita una migración SQL. Para publicar los archivos y seguir los pasos de actualización, consulta [`docs/actualizacion_funcionarios.md`](docs/actualizacion_funcionarios.md).
