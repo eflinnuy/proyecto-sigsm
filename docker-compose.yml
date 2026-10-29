@@ -12,8 +12,23 @@ services:
       DB_USER: sigsm_app
       DB_PASSWORD: ${SIGSM_DB_PASSWORD:-sigsm_local}
     depends_on:
+      eflinn_migrate:
+        condition: service_completed_successfully
+    networks:
+      - eflinn_network
+
+  # Aplica cambios de esquema también cuando el volumen MySQL ya existía.
+  eflinn_migrate:
+    image: mysql:8.0
+    depends_on:
       eflinn_db:
         condition: service_healthy
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+    volumes:
+      - ./sql/migracion_encuestas_seguridad.sql:/migracion_encuestas_seguridad.sql:ro
+    entrypoint: ["sh", "-c"]
+    command: ["mysql -h eflinn_db -u root -p\"$$MYSQL_ROOT_PASSWORD\" sigsm < /migracion_encuestas_seguridad.sql"]
     networks:
       - eflinn_network
 
