@@ -18,7 +18,14 @@ require_once __DIR__.'/../../logica/funciones.php';
 if (isset($_SESSION['usuario_id'])) :
  ?>
                 <nav>
-                    <a class="boton" href="inicio.php">Inicio</a> <a class="boton" href="documentos.php" target="_blank">Documentos</a> <a class="boton" href="encuestas_admin.php">Encuestas</a> <a class="boton" href="ambulancias.php">Traslados</a> <a class="boton" href="funcionarios.php">Funcionarios</a> <a class="boton" href="../portal.php" target="_blank">Abrir portal</a> <form class="form-salir" action="../salir.php" method="post"><?= campoCsrf() ?><button class="boton" type="submit">Salir</button></form>
+                    <a class="boton" href="inicio.php">Inicio</a>
+                    <a class="boton" href="documentos.php">Documentos</a>
+                    <a class="boton" href="encuestas_admin.php">Encuestas</a> 
+                    <a class="boton" href="ambulancias.php">Traslados</a>
+                    <a class="boton" href="funcionarios.php">Funcionarios</a>
+                    <a class="boton" href="../portal.php" target="_blank">Abrir portal</a>
+                    <form class="form-salir" action="../salir.php" method="post">
+                        <?= campoCsrf() ?><button class="boton" type="submit">Salir</button></form>
                 </nav>
                 <?php
 endif;
