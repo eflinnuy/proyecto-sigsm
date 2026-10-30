@@ -4,10 +4,10 @@
  * ERRMODE_EXCEPTION permite que los errores de persistencia puedan
  * ser detectados por las capas superiores.
  */
-$servidor = getenv('DB_HOST') ?: 'localhost';
+$servidor = getenv('DB_HOST') ?: '192.168.2.89';
 $base = getenv('DB_NAME') ?: 'sigsm';
 $usuarioBD = getenv('DB_USER') ?: 'root';
-$claveBD = getenv('DB_PASSWORD') ?: '';
+$claveBD = getenv('DB_PASSWORD') ?: 'root';
 try {
     $pdo = new PDO("mysql:host=$servidor;dbname=$base;charset=utf8mb4", $usuarioBD, $claveBD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
