@@ -34,21 +34,26 @@ WHERE (nombre LIKE '%Ã%' OR nombre LIKE '%Â%')
 
 UPDATE servicios
 SET nombre = CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4)
-WHERE nombre LIKE '%Ã%' OR nombre LIKE '%Â%';
+WHERE (nombre LIKE '%Ã%' OR nombre LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 
 UPDATE documentos
 SET titulo = CONVERT(CAST(CONVERT(titulo USING latin1) AS BINARY) USING utf8mb4)
-WHERE titulo LIKE '%Ã%' OR titulo LIKE '%Â%';
+WHERE (titulo LIKE '%Ã%' OR titulo LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(titulo USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 UPDATE documentos
 SET descripcion = CONVERT(CAST(CONVERT(descripcion USING latin1) AS BINARY) USING utf8mb4)
-WHERE descripcion LIKE '%Ã%' OR descripcion LIKE '%Â%';
+WHERE (descripcion LIKE '%Ã%' OR descripcion LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(descripcion USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 
 UPDATE encuestas_config
 SET nombre = CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4)
-WHERE nombre LIKE '%Ã%' OR nombre LIKE '%Â%';
+WHERE (nombre LIKE '%Ã%' OR nombre LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 UPDATE encuestas_config
 SET descripcion = CONVERT(CAST(CONVERT(descripcion USING latin1) AS BINARY) USING utf8mb4)
-WHERE descripcion LIKE '%Ã%' OR descripcion LIKE '%Â%';
+WHERE (descripcion LIKE '%Ã%' OR descripcion LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(descripcion USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 -- Datos requeridos por versiones recientes de la aplicación.
 SET @migration_sql = IF(
     (SELECT COUNT(*) FROM information_schema.columns
@@ -62,7 +67,8 @@ DEALLOCATE PREPARE migration_stmt;
 
 UPDATE encuestas_config
 SET pregunta = CONVERT(CAST(CONVERT(pregunta USING latin1) AS BINARY) USING utf8mb4)
-WHERE pregunta LIKE '%Ã%' OR pregunta LIKE '%Â%';
+WHERE (pregunta LIKE '%Ã%' OR pregunta LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(pregunta USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 
 SET @migration_sql = IF(
     (SELECT COUNT(*) FROM information_schema.columns
