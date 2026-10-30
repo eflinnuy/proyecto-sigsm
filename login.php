@@ -11,9 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 validarCsrf();
-$usuario = trim($_POST['usuario'] ?? '');
-$clave = $_POST['clave'] ?? '';
-if ($usuario === '' || $clave === '' || !iniciarSesionUsuario($usuario, $clave)) {
+$usuario = is_string($_POST['usuario'] ?? null) ? trim($_POST['usuario']) : '';
+$clave = is_string($_POST['clave'] ?? null) ? $_POST['clave'] : '';
+if (!validarCaptcha($_POST['captcha'] ?? null) || $usuario === '' || $clave === '' || !iniciarSesionUsuario($usuario, $clave)) {
     header('Location: presentacion/index.php?error=1');
     exit;
 }

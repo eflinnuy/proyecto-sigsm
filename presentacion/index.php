@@ -11,6 +11,7 @@ if (isset($_SESSION['usuario_id'])) {
     exit;
 }
 $titulo = 'Acceso administrativo';
+$captcha = preguntaCaptcha();
 require __DIR__.'/vistas/encabezado.php';
  ?>
 <!-- Formulario de autenticación del personal. -->
@@ -23,19 +24,24 @@ require __DIR__.'/vistas/encabezado.php';
     </p>
     <form action="../login.php" method="post">
         <?= campoCsrf() ?>
-        <label>
+        <label for="usuario">
             Usuario
         </label>
-        <input type="text" name="usuario" required maxlength="50">
+        <input id="usuario" type="text" name="usuario" required maxlength="50" autocomplete="username">
         <label for="clave">
             Contraseña
         </label>
-        <input id="clave" type="password" name="clave" required autocomplete="current-password">
-        <button id="alternar-clave" class="secundario" type="button" aria-controls="clave" aria-pressed="false">Mostrar contraseña</button>
+        <div class="password-field">
+            <input id="clave" type="password" name="clave" required autocomplete="current-password">
+            <button class="password-toggle" type="button" aria-label="Mostrar contraseña" aria-controls="clave" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <label for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
+        <input id="captcha" type="number" name="captcha" required inputmode="numeric" autocomplete="off">
         <button type="submit">
             Ingresar
         </button>
     </form>
+    <p><a href="recuperar.php">¿Olvidó su contraseña?</a></p>
     <?php
 // El parámetro error se utiliza únicamente para mostrar un mensaje genérico.
 if (isset($_GET['error'])) :
@@ -51,12 +57,14 @@ endif;
     </div>
 </section>
 <script>
-document.getElementById('alternar-clave').addEventListener('click', function () {
-    const campo = document.getElementById('clave');
-    const visible = campo.type === 'password';
-    campo.type = visible ? 'text' : 'password';
-    this.textContent = visible ? 'Ocultar contraseña' : 'Mostrar contraseña';
-    this.setAttribute('aria-pressed', String(visible));
+document.querySelectorAll('.password-toggle').forEach(function (button) {
+    button.addEventListener('click', function () {
+        const field = document.getElementById(this.getAttribute('aria-controls'));
+        const visible = field.type === 'password';
+        field.type = visible ? 'text' : 'password';
+        this.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        this.setAttribute('aria-pressed', String(visible));
+    });
 });
 </script>
 <?php

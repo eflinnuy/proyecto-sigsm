@@ -38,3 +38,22 @@ function mostrarMensaje() : void {
         unset($_SESSION['mensaje']);
     }
 }
+
+/** Genera una pregunta sencilla para verificar el envío de formularios públicos. */
+function preguntaCaptcha() : string {
+    iniciarSesion();
+    if (!isset($_SESSION['captcha_a'], $_SESSION['captcha_b'])) {
+        $_SESSION['captcha_a'] = random_int(2, 9);
+        $_SESSION['captcha_b'] = random_int(1, 9);
+    }
+    return $_SESSION['captcha_a'].' + '.$_SESSION['captcha_b'];
+}
+
+function validarCaptcha($respuesta) : bool {
+    iniciarSesion();
+    $valido = isset($_SESSION['captcha_a'], $_SESSION['captcha_b'])
+        && is_scalar($respuesta)
+        && hash_equals((string)((int)$_SESSION['captcha_a'] + (int)$_SESSION['captcha_b']), trim((string)$respuesta));
+    unset($_SESSION['captcha_a'], $_SESSION['captcha_b']);
+    return $valido;
+}

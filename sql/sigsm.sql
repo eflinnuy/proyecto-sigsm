@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
     usuario VARCHAR(50) NOT NULL UNIQUE,
 
+    cedula VARCHAR(20) NULL UNIQUE,
+
     clave VARCHAR(255) NOT NULL,
 
     rol ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',

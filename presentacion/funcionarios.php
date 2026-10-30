@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($accion === 'guardar') {
             $nombre = trim($_POST['nombre'] ?? '');
             $usuario = trim($_POST['usuario'] ?? '');
+            $cedula = trim($_POST['cedula'] ?? '');
             $clave = $_POST['clave'] ?? '';
             $rol = $_POST['rol'] ?? '';
             $esEdicion = $id > 0;
@@ -25,8 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (mb_strlen($nombre) < 2 || mb_strlen($nombre) > 100) {
                 throw new InvalidArgumentException('El nombre debe tener entre 2 y 100 caracteres.');
             }
-            if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $usuario)) {
-                throw new InvalidArgumentException('El usuario debe tener entre 3 y 50 caracteres: letras, números, punto, guion o guion bajo.');
+            if ($usuario === '' || mb_strlen($usuario) > 50) {
+                throw new InvalidArgumentException('El nombre de usuario es obligatorio y admite hasta 50 caracteres.');
+            }
+            if (!preg_match('/^[\p{L}\p{N}.-]{5,20}$/u', $cedula)) {
+                throw new InvalidArgumentException('Ingrese una cédula válida (5 a 20 letras o números; puede incluir punto o guion).');
             }
             if (!in_array($rol, $roles, true)) {
                 throw new InvalidArgumentException('Seleccione un rol válido.');
@@ -50,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($esEdicion) {
-                $dao->actualizar($id, $nombre, $usuario, $rol, $clave === '' ? null : $clave);
+                $dao->actualizar($id, $nombre, $usuario, $cedula, $rol, $clave === '' ? null : $clave);
                 if ($id === $idSesion) $_SESSION['nombre'] = $nombre;
                 mensaje('Funcionario actualizado correctamente.');
             } else {
-                $dao->crear($nombre, $usuario, $clave, $rol);
+                $dao->crear($nombre, $usuario, $cedula, $clave, $rol);
                 mensaje('Funcionario creado correctamente.');
             }
             header('Location: funcionarios.php');
@@ -83,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     } catch (PDOException $e) {
         if ($e->getCode() === '23000') {
-            mensaje('Ese nombre de usuario ya está registrado.', 'error');
+            mensaje('Ese nombre de usuario o cédula ya está registrado.', 'error');
         } else {
             error_log('Error al gestionar funcionario: '.$e->getMessage());
             mensaje('No se pudo guardar el funcionario. Revise la conexión y vuelva a intentarlo.', 'error');
@@ -122,9 +126,14 @@ require __DIR__.'/vistas/encabezado.php';
         <label for="nombre">Nombre completo</label>
         <input id="nombre" name="nombre" maxlength="100" required value="<?= limpiar($edicion['nombre'] ?? '') ?>" autocomplete="name">
         <label for="usuario">Nombre de usuario</label>
-        <input id="usuario" name="usuario" maxlength="50" pattern="[A-Za-z0-9._-]{3,50}" required value="<?= limpiar($edicion['usuario'] ?? '') ?>" autocomplete="username">
+        <input id="usuario" name="usuario" maxlength="50" required value="<?= limpiar($edicion['usuario'] ?? '') ?>" autocomplete="username">
+        <label for="cedula">Cédula</label>
+        <input id="cedula" name="cedula" maxlength="20" minlength="5" required value="<?= limpiar($edicion['cedula'] ?? '') ?>" autocomplete="off">
         <label for="clave"><?= $edicion ? 'Nueva contraseña (opcional)' : 'Contraseña inicial' ?></label>
-        <input id="clave" name="clave" type="password" minlength="8" <?= $edicion ? '' : 'required' ?> autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+        <div class="password-field">
+            <input id="clave" name="clave" type="password" minlength="8" <?= $edicion ? '' : 'required' ?> autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+            <button class="password-toggle" type="button" aria-label="Mostrar contraseña" aria-controls="clave" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
         <label for="rol">Permiso</label>
         <select id="rol" name="rol" required>
             <option value="usuario" <?= ($edicion['rol'] ?? 'usuario') === 'usuario' ? 'selected' : '' ?>>Funcionario</option>
@@ -136,6 +145,17 @@ require __DIR__.'/vistas/encabezado.php';
         </div>
     </form>
 </section>
+<script>
+document.querySelectorAll('.password-toggle').forEach(function (button) {
+    button.addEventListener('click', function () {
+        const field = document.getElementById(this.getAttribute('aria-controls'));
+        const visible = field.type === 'password';
+        field.type = visible ? 'text' : 'password';
+        this.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        this.setAttribute('aria-pressed', String(visible));
+    });
+});
+</script>
 
 <section class="tarjeta">
     <h2>Usuarios del panel</h2>
