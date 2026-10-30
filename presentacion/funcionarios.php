@@ -1,7 +1,7 @@
 <?php
 /** Alta, modificación y baja lógica de cuentas del personal. */
 require_once __DIR__.'/../logica/funciones.php';
-soloPersonal();
+soloAdmin();
 require_once __DIR__.'/../datos/conexion.php';
 require_once __DIR__.'/../datos/FuncionarioDAO.php';
 

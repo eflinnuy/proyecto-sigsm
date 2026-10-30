@@ -14,9 +14,16 @@ class UsuarioDAO {
         return $r ?: null;
     }
 
-    public function restablecerClavePorUsuarioYCedula(string $usuario, string $cedula, string $clave) : bool {
-        $stmt = $this->pdo->prepare('UPDATE usuarios SET clave=? WHERE usuario=? AND cedula=? AND activo=1');
-        $stmt->execute([password_hash($clave, PASSWORD_DEFAULT), $usuario, $cedula]);
+    public function buscarIdPorUsuarioYCedula(string $usuario, string $cedula) : ?array {
+        $stmt = $this->pdo->prepare('SELECT id FROM usuarios WHERE usuario=? AND cedula=? AND activo=1 LIMIT 1');
+        $stmt->execute([$usuario, $cedula]);
+        $cuenta = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $cuenta ?: null;
+    }
+
+    public function restablecerClavePorId(int $id, string $clave) : bool {
+        $stmt = $this->pdo->prepare('UPDATE usuarios SET clave=? WHERE id=? AND activo=1');
+        $stmt->execute([password_hash($clave, PASSWORD_DEFAULT), $id]);
         return $stmt->rowCount() === 1;
     }
 }

@@ -19,7 +19,7 @@ Copiar o publicar estos archivos del proyecto:
 - `presentacion/editar_documento.php` y `presentacion/nuevo_documento.php` (actualizados: acceso para funcionarios)
 - `presentacion/ambulancias.php`, `presentacion/nuevo_traslado.php` y `presentacion/editar_traslado.php` (actualizados: acceso para funcionarios)
 - `presentacion/encuestas_admin.php` (actualizado: acceso para funcionarios)
-- `presentacion/vistas/encabezado.php` (actualizado: navegación del panel para el personal)
+- `presentacion/vistas/encabezado.php` (actualizado: navegación del panel y menú hamburguesa móvil)
 - `presentacion/css/estilo.css` (actualizado: iconos de mostrar contraseña)
 - `README.md` (actualizado)
 - `docs/actualizacion_funcionarios.md` (nuevo)
@@ -37,7 +37,7 @@ Esta versión agrega una cédula única a cada cuenta. Antes de publicar los arc
 5. Inicia sesión con una cuenta que tenga el rol `admin` y abre **Funcionarios** desde la barra superior.
 6. Completa la cédula de las cuentas existentes. Crea una cuenta de prueba con usuario, cédula y contraseña de al menos 8 caracteres; cierra sesión y comprueba que puede ingresar y que el captcha aparece.
 7. En el inicio de sesión, abre **¿Olvidó su contraseña?** y recupera la cuenta de prueba indicando su usuario y cédula. La cédula más el usuario funcionan como verificación de identidad; quien conozca ambos podría cambiar la contraseña, así que limita el acceso a esos datos.
-8. Inicia sesión con la cuenta de prueba de rol **Funcionario**. Comprueba que el acceso lleva al panel, no al portal, y que puede abrir Funcionarios, crear y modificar cuentas, gestionar documentos, encuestas y traslados.
+8. Inicia sesión con la cuenta de prueba de rol **Funcionario**. Comprueba que el acceso lleva al panel, no al portal, que puede gestionar documentos, encuestas y traslados, y que no ve ni puede abrir **Funcionarios**.
 9. Comprueba que esa cuenta no ve **Dar de baja** en Documentos y que un intento de enviar la acción directamente a `presentacion/eliminar_documento.php` devuelve acceso denegado.
 10. Desactiva la cuenta de prueba y confirma que ya no puede iniciar sesión. Reactívala si debe quedar disponible.
 
@@ -72,4 +72,5 @@ Reemplaza `<nombre-de-tu-rama>` por la rama real acordada en el repositorio. Si 
 - **Recuperar contraseña:** en el login, la persona ingresa su usuario y cédula registrados y define una contraseña nueva. No se envían correos.
 - El captcha de suma se solicita al iniciar sesión y al restablecer la contraseña.
 - No es posible desactivar la cuenta con la que se inició sesión ni dejar el sistema sin administradores activos.
-- Los funcionarios pueden usar el panel, gestionar cuentas y documentos, pero solo los administradores pueden dar de baja documentos. El servidor también bloquea esa acción si un funcionario intenta abrir directamente la ruta.
+- Los funcionarios pueden usar el panel y gestionar documentos, encuestas y traslados. Solo los administradores pueden gestionar cuentas o dar de baja documentos; el servidor bloquea las rutas administrativas para el personal sin rol de administrador.
+- En pantallas de hasta 750 píxeles, el navbar se oculta tras el botón de menú hamburguesa.
