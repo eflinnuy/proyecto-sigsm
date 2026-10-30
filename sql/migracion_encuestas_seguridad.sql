@@ -29,7 +29,8 @@ DEALLOCATE PREPARE migration_stmt;
 -- que contienen los marcadores típicos de esa codificación dañada.
 UPDATE categorias
 SET nombre = CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4)
-WHERE nombre LIKE '%Ã%' OR nombre LIKE '%Â%';
+WHERE (nombre LIKE '%Ã%' OR nombre LIKE '%Â%')
+  AND CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4) IS NOT NULL;
 
 UPDATE servicios
 SET nombre = CONVERT(CAST(CONVERT(nombre USING latin1) AS BINARY) USING utf8mb4)
