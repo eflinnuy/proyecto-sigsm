@@ -22,8 +22,10 @@ if (isset($_SESSION['usuario_id'])) :
                 </button>
                 <nav class="nav-links" id="menu-panel">
                     <a class="boton" href="inicio.php">Inicio</a>
+                    <?php if (in_array($_SESSION['rol'] ?? '', ['admin', 'usuario', 'funcionario'], true)): ?>
                     <a class="boton" href="documentos.php">Documentos</a>
-                    <a class="boton" href="encuestas_admin.php">Encuestas</a> 
+                    <a class="boton" href="encuestas_admin.php">Encuestas</a>
+                    <?php endif; ?>
                     <a class="boton" href="ambulancias.php">Traslados</a>
                     <?php if (($_SESSION['rol'] ?? '') === 'admin'): ?><a class="boton" href="funcionarios.php">Funcionarios</a><?php endif; ?>
                     <a class="boton" href="../portal.php" target="_blank">Abrir portal</a>

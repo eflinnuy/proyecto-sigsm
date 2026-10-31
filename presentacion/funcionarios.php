@@ -6,7 +6,7 @@ require_once __DIR__.'/../datos/conexion.php';
 require_once __DIR__.'/../datos/FuncionarioDAO.php';
 
 $dao = new FuncionarioDAO($pdo);
-$roles = ['admin', 'usuario'];
+$roles = ['admin', 'funcionario', 'enfermero'];
 $idSesion = (int)$_SESSION['usuario_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -136,7 +136,8 @@ require __DIR__.'/vistas/encabezado.php';
         </div>
         <label for="rol">Permiso</label>
         <select id="rol" name="rol" required>
-            <option value="usuario" <?= ($edicion['rol'] ?? 'usuario') === 'usuario' ? 'selected' : '' ?>>Funcionario</option>
+            <option value="funcionario" <?= in_array(($edicion['rol'] ?? 'funcionario'), ['usuario', 'funcionario'], true) ? 'selected' : '' ?>>Médico / Funcionario</option>
+            <option value="enfermero" <?= ($edicion['rol'] ?? '') === 'enfermero' ? 'selected' : '' ?>>Enfermero/a</option>
             <option value="admin" <?= ($edicion['rol'] ?? '') === 'admin' ? 'selected' : '' ?>>Administrador</option>
         </select>
         <div class="acciones-form">
@@ -171,7 +172,7 @@ document.querySelectorAll('.password-toggle').forEach(function (button) {
                 <tr>
                     <td><?= limpiar($funcionario['nombre']) ?></td>
                     <td><?= limpiar($funcionario['usuario']) ?></td>
-                    <td><?= $funcionario['rol'] === 'admin' ? 'Administrador' : 'Funcionario' ?></td>
+                    <td><?= ['admin' => 'Administrador', 'enfermero' => 'Enfermero/a', 'usuario' => 'Médico / Funcionario', 'funcionario' => 'Médico / Funcionario'][$funcionario['rol']] ?? 'Sin rol' ?></td>
                     <td><?= $funcionario['activo'] ? 'Activo' : 'Inactivo' ?></td>
                     <td class="acciones-tabla">
                         <a class="boton secundario" href="funcionarios.php?editar=<?= (int)$funcionario['id'] ?>">Modificar</a>

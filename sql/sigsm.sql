@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
     clave VARCHAR(255) NOT NULL,
 
-    rol ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
+    rol ENUM('admin','funcionario','enfermero') NOT NULL DEFAULT 'funcionario',
 
     activo TINYINT(1) NOT NULL DEFAULT 1,
 
@@ -248,7 +248,7 @@ INSERT IGNORE INTO usuarios(nombre, usuario, clave, rol) VALUES
     'Usuario básico',
     'usuario',
     '$2y$12$3opYqVWebTuX2SGqIngE1.UcZFIT9qqxWpHbFGJrpdf.X7hqEyHfW',
-    'usuario'
+    'funcionario'
 );
 
 

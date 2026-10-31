@@ -4,22 +4,29 @@
  * Muestra las encuestas configuradas y permite gestionar su estado.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloPersonal();
+soloGestionContenido();
 require_once __DIR__ . '/../datos/conexion.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     validarCsrf();
     $accion = $_POST['accion'] ?? '';
-    if ($accion === 'crear') {
+    if (in_array($accion, ['crear', 'guardar'], true)) {
+        $id = filter_var($_POST['id'] ?? '', FILTER_VALIDATE_INT) ?: 0;
         $nombre = trim($_POST['nombre'] ?? '');
         $pregunta = trim($_POST['pregunta'] ?? '');
         $desc = trim($_POST['descripcion'] ?? '');
         $servicioId = filter_var($_POST['servicio_id'] ?? '', FILTER_VALIDATE_INT) ?: null;
-        if ($nombre === '' || $pregunta === '') {
-            mensaje('Escriba el nombre de la encuesta.', 'error');
+        if ($nombre === '' || $pregunta === '' || mb_strlen($nombre) > 150 || mb_strlen($pregunta) > 250 || mb_strlen($desc) > 500) {
+            mensaje('Revise los campos: nombre, pregunta y descripción son obligatorios o superan el largo permitido.', 'error');
         } else {
-            $s = $pdo->prepare('INSERT INTO encuestas_config(nombre,pregunta,descripcion,servicio_id,activa) VALUES(?,?,?,?,1)');
-            $s->execute([$nombre, $pregunta, $desc, $servicioId]);
-            mensaje('Encuesta creada.');
+            if ($id > 0) {
+                $s = $pdo->prepare('UPDATE encuestas_config SET nombre=?,pregunta=?,descripcion=?,servicio_id=? WHERE id=?');
+                $s->execute([$nombre, $pregunta, $desc, $servicioId, $id]);
+                mensaje('Encuesta actualizada.');
+            } else {
+                $s = $pdo->prepare('INSERT INTO encuestas_config(nombre,pregunta,descripcion,servicio_id,activa) VALUES(?,?,?,?,1)');
+                $s->execute([$nombre, $pregunta, $desc, $servicioId]);
+                mensaje('Encuesta creada.');
+            }
             header('Location: encuestas_admin.php');
             exit;
         }
@@ -44,6 +51,14 @@ $respuestas = $pdo->query(
      ORDER BY r.creada_en DESC'
 )->fetchAll(PDO::FETCH_ASSOC);
 $servicios=$pdo->query('SELECT id,nombre FROM servicios ORDER BY nombre')->fetchAll(PDO::FETCH_ASSOC);
+$idEdicion = filter_var($_GET['editar'] ?? '', FILTER_VALIDATE_INT) ?: 0;
+$edicion = null;
+if ($idEdicion) {
+    $stmtEdicion = $pdo->prepare('SELECT * FROM encuestas_config WHERE id=?');
+    $stmtEdicion->execute([$idEdicion]);
+    $edicion = $stmtEdicion->fetch(PDO::FETCH_ASSOC) ?: null;
+    if (!$edicion) { mensaje('No se encontró la encuesta seleccionada.', 'error'); header('Location: encuestas_admin.php'); exit; }
+}
 $titulo = 'Administrar encuestas';
 require __DIR__ . '/vistas/encabezado.php';
  ?>
@@ -59,28 +74,30 @@ require __DIR__ . '/vistas/encabezado.php';
 </div>
 <section class="tarjeta">
     <h2>
-        Nueva encuesta
+        <?= $edicion ? 'Editar encuesta' : 'Nueva encuesta' ?>
     </h2>
     <form method="post">
         <?= campoCsrf() ?>
-        <input type="hidden" name="accion" value="crear">
+        <input type="hidden" name="accion" value="<?= $edicion ? 'guardar' : 'crear' ?>">
+        <input type="hidden" name="id" value="<?= (int)($edicion['id'] ?? 0) ?>">
         <label>
             Nombre
         </label>
-        <input name="nombre" maxlength="150" required placeholder="Ej.: Evaluar atención general">
+        <input name="nombre" maxlength="150" required placeholder="Ej.: Evaluar atención general" value="<?= limpiar($edicion['nombre'] ?? '') ?>">
         <label>
             Pregunta de valoración
         </label>
-        <input name="pregunta" maxlength="250" required placeholder="¿Cómo valora la atención recibida?">
+        <input name="pregunta" maxlength="250" required placeholder="¿Cómo valora la atención recibida?" value="<?= limpiar($edicion['pregunta'] ?? '') ?>">
         <label>
             Descripción
         </label>
-        <textarea name="descripcion" rows="3" maxlength="500" placeholder="Explique brevemente qué se quiere evaluar."></textarea>
+        <textarea name="descripcion" rows="3" maxlength="500" placeholder="Explique brevemente qué se quiere evaluar."><?= limpiar($edicion['descripcion'] ?? '') ?></textarea>
         <label>Servicio</label>
-        <select name="servicio_id"><option value="">General</option><?php foreach ($servicios as $servicio): ?><option value="<?= (int)$servicio['id'] ?>"><?= limpiar($servicio['nombre']) ?></option><?php endforeach; ?></select>
+        <select name="servicio_id"><option value="">General</option><?php foreach ($servicios as $servicio): ?><option value="<?= (int)$servicio['id'] ?>" <?= (int)($edicion['servicio_id'] ?? 0) === (int)$servicio['id'] ? 'selected' : '' ?>><?= limpiar($servicio['nombre']) ?></option><?php endforeach; ?></select>
         <button>
-            Crear encuesta
+            <?= $edicion ? 'Guardar cambios' : 'Crear encuesta' ?>
         </button>
+        <?php if ($edicion): ?> <a class="boton secundario" href="encuestas_admin.php">Cancelar</a><?php endif; ?>
     </form>
 </section>
 <section class="tarjeta">
@@ -129,6 +146,7 @@ foreach ($lista as $e) :
                     <td><?= $e['promedio'] ?? '-' ?></td>
                     <td><?php for ($puntaje=1;$puntaje<=5;$puntaje++): ?><?= $puntaje ?>: <?= (int)($e['p'.$puntaje] ?? 0) ?><?= $puntaje<5 ? ' · ' : '' ?><?php endfor; ?></td>
                     <td>
+                        <a class="boton secundario" href="encuestas_admin.php?editar=<?= (int)$e['id'] ?>">Editar</a>
                         <form method="post">
         <?= campoCsrf() ?>
                             <input type="hidden" name="accion" value="cambiar"> <input type="hidden" name="id" value="<?= $e['id'] ?>">

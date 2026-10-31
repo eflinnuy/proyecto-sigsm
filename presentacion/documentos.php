@@ -5,7 +5,7 @@
  * o desactivar documentos.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloPersonal();
+soloGestionContenido();
 require_once __DIR__ . '/../datos/conexion.php';
 $q = trim($_GET['q'] ?? '');
 if ($q !== '') {
@@ -28,7 +28,7 @@ require __DIR__ . '/vistas/encabezado.php';
         </p>
     </div>
     <?php
-if ($_SESSION['rol'] === 'admin') :
+if (in_array($_SESSION['rol'], ['admin', 'usuario', 'funcionario'], true)) :
  ?> <a class="boton" href="nuevo_documento.php"> + Nuevo documento</a> <?php
 endif;
  ?>
@@ -56,7 +56,7 @@ endif;
                     Acceso
                 </th>
                 <?php
-if ($_SESSION['rol'] === 'admin') :
+if (in_array($_SESSION['rol'], ['admin', 'usuario', 'funcionario'], true)) :
  ?>
                 <th>
                     Acciones
@@ -84,10 +84,10 @@ foreach ($docs as $d) :
                     <a href="ver_documento.php?id=<?= $d['id'] ?>"> Ver / QR</a>
                 </td>
                 <?php
-if ($_SESSION['rol'] === 'admin') :
+if (in_array($_SESSION['rol'], ['admin', 'usuario', 'funcionario'], true)) :
  ?>
                 <td>
-                    <a href="editar_documento.php?id=<?= $d['id'] ?>"> Editar</a><?php if (($_SESSION['rol'] ?? '') === 'admin'): ?> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button type="submit">Dar de baja</button></form><?php endif; ?>
+                    <a href="editar_documento.php?id=<?= (int)$d['id'] ?>">Editar</a><?php if (($_SESSION['rol'] ?? '') === 'admin'): ?> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button type="submit">Dar de baja</button></form><?php endif; ?>
                 </td>
                 <?php
 endif;

@@ -4,7 +4,7 @@
  * Permite actualizar los datos del traslado seleccionado.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloPersonal();
+soloTraslados();
 require_once __DIR__ . '/../datos/conexion.php';
 $id = (int)($_GET['id'] ?? 0);
 $edit = $id>0;

@@ -5,7 +5,7 @@
  * panel administrativo.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloPersonal();
+soloTraslados();
 require_once __DIR__ . '/../datos/conexion.php';
 $q = trim($_GET['q'] ?? '');
 if ($q) {
@@ -27,7 +27,7 @@ require __DIR__ . '/vistas/encabezado.php';
             Seguimiento de ambulancias y otros vehículos.
         </p>
     </div>
-    <a class="boton" href="nuevo_traslado.php"> + Nuevo traslado</a>
+    <?php if (in_array($_SESSION['rol'] ?? '', ['admin', 'enfermero'], true)): ?><a class="boton" href="nuevo_traslado.php"> + Nuevo traslado</a><?php endif; ?>
 </div>
 <form class="buscar">
     <input name="q" value="<?= limpiar($q) ?>" placeholder="Buscar paciente, destino o estado">
@@ -83,7 +83,7 @@ foreach ($lista as $x) :
                 <span class="estado"> <?= limpiar($x['estado']) ?></span>
             </td>
             <td>
-                <a href="editar_traslado.php?id=<?= $x['id'] ?>"> Editar</a>
+                <?php if (in_array($_SESSION['rol'] ?? '', ['admin', 'enfermero'], true)): ?><a href="editar_traslado.php?id=<?= (int)$x['id'] ?>">Actualizar seguimiento</a><?php else: ?>Consulta<?php endif; ?>
             </td>
         </tr>
         <?php

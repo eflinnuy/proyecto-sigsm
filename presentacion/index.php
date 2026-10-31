@@ -6,7 +6,7 @@
 require_once __DIR__.'/../logica/funciones.php';
 iniciarSesion();
 if (isset($_SESSION['usuario_id'])) {
-    $rolesPanel = ['admin', 'usuario', 'funcionario'];
+    $rolesPanel = ['admin', 'usuario', 'funcionario', 'enfermero'];
     header('Location: ' . (in_array($_SESSION['rol'] ?? '', $rolesPanel, true) ? 'inicio.php' : '../portal.php'));
     exit;
 }

@@ -5,7 +5,7 @@
  * a las capas correspondientes.
  */
 require_once __DIR__ . '/../logica/funciones.php';
-soloPersonal();
+soloTraslados();
 require_once __DIR__ . '/../datos/conexion.php';
 $id = 0;
 $edit = false;

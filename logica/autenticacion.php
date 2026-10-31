@@ -42,9 +42,25 @@ function proteger() : void {
 // Permite el acceso a las funciones del panel a administradores y funcionarios.
 function soloPersonal() : void {
     proteger();
-    if (!in_array($_SESSION['rol'] ?? '', ['admin', 'usuario', 'funcionario'], true)) {
+    if (!in_array($_SESSION['rol'] ?? '', ['admin', 'usuario', 'funcionario', 'enfermero'], true)) {
         header('Location: ../portal.php');
         exit;
+    }
+}
+// Médico/Funcionario administra documentos y encuestas.
+function soloGestionContenido() : void {
+    soloPersonal();
+    if (!in_array($_SESSION['rol'] ?? '', ['admin', 'usuario', 'funcionario'], true)) {
+        http_response_code(403);
+        exit('No tienes permiso para gestionar documentos o encuestas.');
+    }
+}
+// Traslados son visibles y editables únicamente por administración y enfermería.
+function soloTraslados() : void {
+    soloPersonal();
+    if (!in_array($_SESSION['rol'] ?? '', ['admin', 'enfermero'], true)) {
+        http_response_code(403);
+        exit('No tienes permiso para consultar o gestionar traslados.');
     }
 }
 // Restringe operaciones reservadas al administrador, como dar de baja documentos.

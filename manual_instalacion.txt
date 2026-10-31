@@ -6,6 +6,11 @@ MANUAL DE INSTALACIÓN - SIGSM
 4. Revisar datos/conexion.php si las credenciales son diferentes.
 5. Abrir http://localhost/sigsm/
 
+El archivo sql/sigsm.sql crea y selecciona la base "sigsm". Para una base
+existente, ejecuta sql/migracion_roles_personal.sql en phpMyAdmin. Conserva las
+cuentas y convierte el rol antiguo "usuario" a "funcionario". Administra los
+perfiles desde Panel > Funcionarios.
+
 Usuarios de prueba:
 admin / 1234
 usuario / 1234

@@ -26,20 +26,23 @@ Copiar o publicar estos archivos del proyecto:
 
 ## Actualización de base de datos
 
-Esta versión agrega una cédula única a cada cuenta. Antes de publicar los archivos, haz una copia de seguridad de la base `sigsm` y ejecuta una sola vez [`../sql/migracion_cedula_funcionarios.sql`](../sql/migracion_cedula_funcionarios.sql) en phpMyAdmin. Las cuentas existentes quedan inicialmente sin cédula; entra como administrador, abre **Funcionarios** y edita cada cuenta para registrarla. Hasta completar ese paso, esas cuentas no podrán usar la recuperación de contraseña.
+Esta versión conserva el nombre de base `sigsm` y las credenciales existentes. Antes de publicar, exporta una copia de seguridad. Ejecuta las migraciones `../sql/migracion_roles_personal.sql`, `../sql/migracion_encuestas_seguridad.sql` y `../sql/migracion_cedula_funcionarios.sql`. Las cuentas existentes sin cédula deberán completarse desde **Funcionarios** para habilitar la recuperación de contraseña.
+
+La migración de roles convierte el rol anterior `usuario` a `funcionario` y conserva las cuentas existentes.
 
 ## Publicar en un servidor con XAMPP
 
-1. En phpMyAdmin, selecciona la base `sigsm` y usa **Exportar** para guardar una copia de seguridad antes de publicar.
-2. Copia la carpeta del proyecto a una carpeta temporal o guarda una copia de los archivos indicados arriba. No reemplaces la base de datos.
+1. En phpMyAdmin, selecciona la base existente y usa **Exportar** para guardar una copia de seguridad antes de publicar.
+2. Copia la carpeta del proyecto a una carpeta temporal o guarda una copia de los archivos indicados arriba. Conserva la base existente y verifica la copia de seguridad antes de publicar.
 3. Copia los archivos incluidos manteniendo sus rutas dentro de `htdocs/sigsm/`. Si publicas por Git, realiza primero los pasos de la sección siguiente en tu equipo de desarrollo.
 4. Confirma que Apache y MySQL estén iniciados en XAMPP y abre `http://localhost/sigsm/`.
 5. Inicia sesión con una cuenta que tenga el rol `admin` y abre **Funcionarios** desde la barra superior.
 6. Completa la cédula de las cuentas existentes. Crea una cuenta de prueba con usuario, cédula y contraseña de al menos 8 caracteres; cierra sesión y comprueba que puede ingresar y que el captcha aparece.
 7. En el inicio de sesión, abre **¿Olvidó su contraseña?** y recupera la cuenta de prueba indicando su usuario y cédula. La cédula más el usuario funcionan como verificación de identidad; quien conozca ambos podría cambiar la contraseña, así que limita el acceso a esos datos.
-8. Inicia sesión con la cuenta de prueba de rol **Funcionario**. Comprueba que el acceso lleva al panel, no al portal, que puede gestionar documentos, encuestas y traslados, y que no ve ni puede abrir **Funcionarios**.
-9. Comprueba que esa cuenta no ve **Dar de baja** en Documentos y que un intento de enviar la acción directamente a `presentacion/eliminar_documento.php` devuelve acceso denegado.
-10. Desactiva la cuenta de prueba y confirma que ya no puede iniciar sesión. Reactívala si debe quedar disponible.
+8. Inicia sesión con la cuenta de prueba **Médico / Funcionario**. Comprueba que puede gestionar documentos y encuestas, pero no acceder a traslados ni a **Funcionarios**.
+9. Inicia sesión con una cuenta **Enfermero/a** y confirma que puede registrar y seguir traslados, y recibe acceso denegado al intentar abrir documentos, encuestas o Funcionarios.
+10. Comprueba que la cuenta Médico / Funcionario no ve **Dar de baja** en Documentos y que enviar la acción directamente a `presentacion/eliminar_documento.php` devuelve acceso denegado. Verifica que el administrador conserva acceso a las tres áreas y a Funcionarios.
+11. Desactiva la cuenta de prueba y confirma que ya no puede iniciar sesión. Reactívala si debe quedar disponible.
 
 ## Subir los cambios con Git
 

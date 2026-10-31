@@ -13,5 +13,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e) {
-    //die('No se puede conectar con la base de datos. Revisa datos/conexion.php y el SQL.');
+    error_log('SIGSM: no se pudo conectar a MySQL en '.$servidor.' para la base '.$base.': '.$e->getMessage());
+    http_response_code(503);
+    exit('SIGSM no puede conectarse a la base de datos. Compruebe que MySQL esté activo y que el servidor configurado sea accesible. El detalle técnico quedó registrado en el log de PHP.');
 }

@@ -1,8 +1,7 @@
 <?php
 /**
  * Panel administrativo.
- * Solo los administradores pueden acceder; los indicadores se obtienen
- * directamente de la base de datos y luego se presentan en tarjetas.
+ * El personal autorizado ve únicamente las áreas que corresponden a su rol.
  */
 require_once __DIR__ . '/../logica/funciones.php';
 soloPersonal();
@@ -23,8 +22,10 @@ require __DIR__ . '/vistas/encabezado.php';
         Desde aquí puede administrar la información que verá el paciente.
     </p>
 </section>
-<!-- Resumen de las tres áreas administrativas. -->
+<?php $rolPanel = $_SESSION['rol'] ?? ''; ?>
+<!-- Resumen según las áreas autorizadas para el rol. -->
 <div class="tarjetas">
+    <?php if (in_array($rolPanel, ['admin', 'usuario', 'funcionario'], true)): ?>
     <div class="tarjeta">
         <h2>
             Documentos
@@ -43,6 +44,8 @@ require __DIR__ . '/vistas/encabezado.php';
         </p>
         <a class="boton" href="encuestas_admin.php"> Administrar encuestas</a>
     </div>
+    <?php endif; ?>
+    <?php if (in_array($rolPanel, ['admin', 'enfermero'], true)): ?>
     <div class="tarjeta">
         <h2>
             Traslados
@@ -52,6 +55,7 @@ require __DIR__ . '/vistas/encabezado.php';
         </p>
         <a class="boton" href="ambulancias.php"> Administrar traslados</a>
     </div>
+    <?php endif; ?>
 </div>
 <!-- Acceso rápido al portal público. -->
 <div class="tarjeta">

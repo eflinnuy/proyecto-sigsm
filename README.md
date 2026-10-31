@@ -4,6 +4,8 @@
 
 **SIGSM** es un sistema desarrollado para la **gestión y organización de documentación de pacientes**, utilizando una arquitectura separada por capas para mantener el proyecto organizado y facilitar su mantenimiento.
 
+El panel tiene tres perfiles: **Administrador** (acceso completo y gestión de cuentas), **Médico / Funcionario** (panel, documentos y encuestas) y **Enfermero/a** (panel y creación/seguimiento de traslados). La aplicación conserva la base de datos `sigsm` y sus credenciales configuradas.
+
 ---
 
 ## Estructura del proyecto
@@ -43,13 +45,15 @@ Copiar la carpeta `sigsm` dentro de:
 xampp/htdocs/
 ```
 
-### 2. Crear la base de datos
+### 2. Crear la base de datos `sigsm`
 
 Abrir **phpMyAdmin** y ejecutar el archivo:
 
 ```text
 sql/sigsm.sql
 ```
+
+El esquema crea y selecciona la base `sigsm`.
 
 ### 3. Configurar la conexión
 
@@ -128,8 +132,8 @@ Cada capa tiene una responsabilidad específica, permitiendo mantener una estruc
 
 ## Actualización de seguridad y encuestas
 
-La instalación SQL ya no elimina tablas existentes. Para una instalación nueva, ejecuta `sql/sigsm.sql`. Para actualizar una base SIGSM creada con una versión anterior, ejecuta una sola vez `sql/migracion_encuestas_seguridad.sql`; agrega la pregunta configurable, el servicio asociado y el token de respuesta. En esta copia local, la migración ya fue aplicada. Las respuestas usan escala de 1 a 5, CSRF y token de sesión. Los archivos PDF se sirven a través de `presentacion/descargar_documento.php`, que vuelve a comprobar que el documento siga activo; Apache también bloquea el acceso directo a la carpeta `documentos/`.
+La instalación SQL no elimina tablas existentes. Para actualizar una base existente, ejecuta `sql/migracion_roles_personal.sql` para habilitar los roles y convertir el rol antiguo `usuario` a `funcionario`; Docker aplica también las migraciones de roles, encuestas y cédula al iniciar. La base conserva el nombre `sigsm`. Las respuestas usan escala de 1 a 5, CSRF y token de sesión. Los archivos PDF se sirven a través de `presentacion/descargar_documento.php`, que vuelve a comprobar que el documento siga activo; Apache también bloquea el acceso directo a la carpeta `documentos/`.
 
 ## Gestión de funcionarios
 
-Los administradores y funcionarios pueden usar las funciones del panel. Solo los administradores pueden abrir **Funcionarios** y administrar cuentas; los funcionarios no pueden crear, modificar ni desactivar usuarios. El menú del panel se convierte en un menú hamburguesa en pantallas pequeñas. La recuperación valida primero el usuario y su cédula y, solo si coinciden, permite cambiar la contraseña. Esta función requiere ejecutar una vez [`sql/migracion_cedula_funcionarios.sql`](sql/migracion_cedula_funcionarios.sql) en la base existente. Para publicar los archivos y seguir los pasos de actualización, consulta [`docs/actualizacion_funcionarios.md`](docs/actualizacion_funcionarios.md).
+Los administradores tienen acceso completo y pueden administrar cuentas; Médico / Funcionario gestiona documentos y encuestas; Enfermero/a consulta el panel y registra y sigue traslados. Solo los administradores pueden abrir **Funcionarios**. Ejecuta [`sql/migracion_roles_personal.sql`](sql/migracion_roles_personal.sql) para convertir las cuentas antiguas `usuario`. Para publicar los archivos y seguir los pasos de actualización, consulta [`docs/actualizacion_funcionarios.md`](docs/actualizacion_funcionarios.md).
