@@ -30,13 +30,13 @@ services:
       - ./sql/migracion_roles_personal.sql:/migracion_roles_personal.sql:ro
       - ./sql/migracion_cedula_funcionarios.sql:/migracion_cedula_funcionarios.sql:ro
     entrypoint: ["sh", "-c"]
-    command: >-
-      mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$$MYSQL_ROOT_PASSWORD" sigsm < /migracion_encuestas_seguridad.sql
-      && mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$$MYSQL_ROOT_PASSWORD" sigsm < /migracion_roles_personal.sql
-      && mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$$MYSQL_ROOT_PASSWORD" sigsm < /migracion_cedula_funcionarios.sql
+    command:
+      - |
+        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$MYSQL_ROOT_PASSWORD" sigsm < /migracion_encuestas_seguridad.sql &&
+        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$MYSQL_ROOT_PASSWORD" sigsm < /migracion_roles_personal.sql &&
+        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$MYSQL_ROOT_PASSWORD" sigsm < /migracion_cedula_funcionarios.sql
     networks:
       - eflinn_network
-
   eflinn_db:
     image: mysql:8.0
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
