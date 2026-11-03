@@ -27,16 +27,16 @@ require __DIR__ . '/vistas/encabezado.php';
             Seguimiento de ambulancias y otros vehículos.
         </p>
     </div>
-    <?php if (in_array($_SESSION['rol'] ?? '', ['admin', 'enfermero'], true)): ?><a class="boton" href="nuevo_traslado.php"> + Nuevo traslado</a><?php endif; ?>
+    <?php if (in_array($_SESSION['rol'] ?? '', ['admin', 'enfermero'], true)): ?><a class="btn btn-primary boton" href="nuevo_traslado.php"> + Nuevo traslado</a><?php endif; ?>
 </div>
 <form class="buscar">
-    <input name="q" value="<?= limpiar($q) ?>" placeholder="Buscar paciente, destino o estado">
-    <button>
+    <input class="form-control" name="q" value="<?= limpiar($q) ?>" placeholder="Buscar paciente, destino o estado">
+    <button class="btn btn-primary">
         Buscar
     </button>
 </form>
 <div class="tabla-wrap">
-    <table>
+    <table class="table table-hover align-middle mb-0">
         <tr>
             <th>
                 Paciente / elemento

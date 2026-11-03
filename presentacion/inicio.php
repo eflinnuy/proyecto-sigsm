@@ -14,7 +14,7 @@ $titulo = 'Panel administrativo';
 require __DIR__ . '/vistas/encabezado.php';
  ?>
 <!-- Encabezado del panel administrativo. -->
-<section class="hero">
+<section class="card border-0 hero">
     <h1>
         Panel administrativo
     </h1>
@@ -26,46 +26,46 @@ require __DIR__ . '/vistas/encabezado.php';
 <!-- Resumen según las áreas autorizadas para el rol. -->
 <div class="tarjetas">
     <?php if (in_array($rolPanel, ['admin', 'usuario', 'funcionario'], true)): ?>
-    <div class="tarjeta">
+    <div class="card shadow-sm tarjeta">
         <h2>
             Documentos
         </h2>
         <p class="numero">
             <?= $totalDocs ?>
         </p>
-        <a class="boton" href="documentos.php"> Administrar documentos</a>
+        <a class="btn btn-primary boton" href="documentos.php"> Administrar documentos</a>
     </div>
-    <div class="tarjeta">
+    <div class="card shadow-sm tarjeta">
         <h2>
             Encuestas
         </h2>
         <p class="numero">
             <?= $totalEncuestas ?>
         </p>
-        <a class="boton" href="encuestas_admin.php"> Administrar encuestas</a>
+        <a class="btn btn-primary boton" href="encuestas_admin.php"> Administrar encuestas</a>
     </div>
     <?php endif; ?>
     <?php if (in_array($rolPanel, ['admin', 'enfermero'], true)): ?>
-    <div class="tarjeta">
+    <div class="card shadow-sm tarjeta">
         <h2>
             Traslados
         </h2>
         <p class="numero">
             <?= $totalTras ?>
         </p>
-        <a class="boton" href="ambulancias.php"> Administrar traslados</a>
+        <a class="btn btn-primary boton" href="ambulancias.php"> Administrar traslados</a>
     </div>
     <?php endif; ?>
 </div>
 <!-- Acceso rápido al portal público. -->
-<div class="tarjeta">
+<div class="card shadow-sm tarjeta">
     <h2>
         Portal del paciente
     </h2>
     <p>
         Esta es la página que puede abrir el paciente sin usuario ni contraseña.
     </p>
-    <a class="boton" href="../portal.php" target="_blank">Abrir portal</a>
+    <a class="btn btn-primary boton" href="../portal.php" target="_blank">Abrir portal</a>
 </div>
 <?php
 require __DIR__ . '/vistas/pie.php';

@@ -83,7 +83,7 @@ $captcha = preguntaCaptcha();
 $titulo = 'Recuperar contraseña';
 require __DIR__.'/vistas/encabezado.php';
 ?>
-<section class="tarjeta login">
+<section class="card shadow-sm tarjeta login">
     <h1>Recuperar contraseña</h1>
     <?php if (isset($_GET['resultado'])): ?>
         <div class="mensaje bien">La contraseña se actualizó. Ya puede volver al inicio e ingresar.</div>
@@ -98,14 +98,14 @@ require __DIR__.'/vistas/encabezado.php';
         <?php else: ?>
             <form method="post" autocomplete="off">
                 <?= campoCsrf() ?>
-                <input type="hidden" name="accion" value="verificar">
-                <label for="usuario">Nombre de usuario</label>
-                <input id="usuario" name="usuario" maxlength="50" required autocomplete="username">
-                <label for="cedula">Cédula</label>
-                <input id="cedula" name="cedula" maxlength="20" required autocomplete="off">
-                <label for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
-                <input id="captcha" name="captcha" type="number" required inputmode="numeric" autocomplete="off">
-                <button type="submit">Verificar identidad</button>
+                <input class="form-control" type="hidden" name="accion" value="verificar">
+                <label class="form-label" for="usuario">Nombre de usuario</label>
+                <input class="form-control" id="usuario" name="usuario" maxlength="50" required autocomplete="username">
+                <label class="form-label" for="cedula">Cédula</label>
+                <input class="form-control" id="cedula" name="cedula" maxlength="20" required autocomplete="off">
+                <label class="form-label" for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
+                <input class="form-control" id="captcha" name="captcha" type="number" required inputmode="numeric" autocomplete="off">
+                <button class="btn btn-primary" type="submit">Verificar identidad</button>
             </form>
         <?php endif; ?>
     <?php else: ?>
@@ -115,20 +115,20 @@ require __DIR__.'/vistas/encabezado.php';
         <?php endif; ?>
         <form method="post" autocomplete="off">
             <?= campoCsrf() ?>
-            <input type="hidden" name="accion" value="cambiar">
-            <label for="clave">Nueva contraseña</label>
+            <input class="form-control" type="hidden" name="accion" value="cambiar">
+            <label class="form-label" for="clave">Nueva contraseña</label>
             <div class="password-field">
-                <input id="clave" name="clave" type="password" minlength="8" required autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+                <input class="form-control" id="clave" name="clave" type="password" minlength="8" required autocomplete="new-password" placeholder="Mínimo 8 caracteres">
                 <button class="password-toggle" type="button" aria-label="Mostrar contraseña" aria-controls="clave" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
             </div>
-            <label for="confirmacion">Repita la contraseña</label>
+            <label class="form-label" for="confirmacion">Repita la contraseña</label>
             <div class="password-field">
-                <input id="confirmacion" name="confirmacion" type="password" minlength="8" required autocomplete="new-password">
+                <input class="form-control" id="confirmacion" name="confirmacion" type="password" minlength="8" required autocomplete="new-password">
                 <button class="password-toggle" type="button" aria-label="Mostrar contraseña" aria-controls="confirmacion" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
             </div>
-            <label for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
-            <input id="captcha" name="captcha" type="number" required inputmode="numeric" autocomplete="off">
-            <button type="submit">Cambiar contraseña</button>
+            <label class="form-label" for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
+            <input class="form-control" id="captcha" name="captcha" type="number" required inputmode="numeric" autocomplete="off">
+            <button class="btn btn-primary" type="submit">Cambiar contraseña</button>
         </form>
         <p><a href="recuperar.php?reiniciar=1">Volver a verificar la identidad</a></p>
     <?php endif; ?>

@@ -29,18 +29,18 @@ require __DIR__ . '/vistas/encabezado.php';
     </div>
     <?php
 if (in_array($_SESSION['rol'], ['admin', 'usuario', 'funcionario'], true)) :
- ?> <a class="boton" href="nuevo_documento.php"> + Nuevo documento</a> <?php
+ ?> <a class="btn btn-primary boton" href="nuevo_documento.php"> + Nuevo documento</a> <?php
 endif;
  ?>
 </div>
 <form class="buscar" method="get">
-    <input name="q" value="<?= limpiar($q) ?>" placeholder="Buscar por título o categoría">
-    <button>
+    <input class="form-control" name="q" value="<?= limpiar($q) ?>" placeholder="Buscar por título o categoría">
+    <button class="btn btn-primary">
         Buscar
     </button>
 </form>
 <div class="tabla-wrap">
-    <table>
+    <table class="table table-hover align-middle mb-0">
         <thead>
             <tr>
                 <th>
@@ -87,7 +87,7 @@ foreach ($docs as $d) :
 if (in_array($_SESSION['rol'], ['admin', 'usuario', 'funcionario'], true)) :
  ?>
                 <td>
-                    <a href="editar_documento.php?id=<?= (int)$d['id'] ?>">Editar</a><?php if (($_SESSION['rol'] ?? '') === 'admin'): ?> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button type="submit">Dar de baja</button></form><?php endif; ?>
+                    <a href="editar_documento.php?id=<?= (int)$d['id'] ?>">Editar</a><?php if (($_SESSION['rol'] ?? '') === 'admin'): ?> | <form method="post" action="eliminar_documento.php" style="display:inline" onsubmit="return confirm('¿Dar de baja este documento?')"><input class="form-control" type="hidden" name="id" value="<?= (int)$d['id'] ?>"><?= campoCsrf() ?><button class="btn btn-primary" type="submit">Dar de baja</button></form><?php endif; ?>
                 </td>
                 <?php
 endif;

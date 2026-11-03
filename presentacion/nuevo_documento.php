@@ -38,35 +38,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $titulo = 'Nuevo documento';
 require __DIR__ . '/vistas/encabezado.php';
  ?>
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h1>
         Nuevo documento
     </h1>
     <form method="post" enctype="multipart/form-data">
         <?= campoCsrf() ?>
-        <label>
+        <label class="form-label">
             Título
         </label>
-        <input name="titulo" required maxlength="150">
-        <label>
+        <input class="form-control" name="titulo" required maxlength="150">
+        <label class="form-label">
             Categoría
         </label>
-        <select name="categoria_id" required>
+        <select class="form-select" name="categoria_id" required>
             <option value=""> Elegir...</option> <?php
 foreach ($categorias as $c) :
  ?> <option value="<?= $c['id'] ?>"> <?= limpiar($c['nombre']) ?></option> <?php
 endforeach;
  ?>
         </select>
-        <label>
+        <label class="form-label">
             Descripción
         </label>
-        <textarea name="descripcion" rows="5"></textarea>
-        <label>
+        <textarea class="form-control" name="descripcion" rows="5"></textarea>
+        <label class="form-label">
             Archivo PDF
         </label>
-        <input type="file" name="archivo" accept="application/pdf" required>
-        <button>
+        <input class="form-control" type="file" name="archivo" accept="application/pdf" required>
+        <button class="btn btn-primary">
             Guardar
         </button>
     </form>

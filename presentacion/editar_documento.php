@@ -47,35 +47,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $titulo = 'Editar documento';
 require __DIR__ . '/vistas/encabezado.php';
  ?>
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h1>
         Editar documento
     </h1>
     <form method="post" enctype="multipart/form-data">
         <?= campoCsrf() ?>
-        <label>
+        <label class="form-label">
             Título
         </label>
-        <input name="titulo" value="<?= limpiar($doc['titulo']) ?>" required>
-        <label>
+        <input class="form-control" name="titulo" value="<?= limpiar($doc['titulo']) ?>" required>
+        <label class="form-label">
             Categoría
         </label>
-        <select name="categoria_id">
+        <select class="form-select" name="categoria_id">
             <?php
 foreach ($cats as $c) :
  ?> <option value="<?= $c['id'] ?>" <?= $c['id'] == $doc['categoria_id'] ? 'selected' : '' ?>> <?= limpiar($c['nombre']) ?></option> <?php
 endforeach;
  ?>
         </select>
-        <label>
+        <label class="form-label">
             Descripción
         </label>
-        <textarea name="descripcion" rows="5"> <?= limpiar($doc['descripcion']) ?></textarea>
-        <label>
+        <textarea class="form-control" name="descripcion" rows="5"> <?= limpiar($doc['descripcion']) ?></textarea>
+        <label class="form-label">
             Reemplazar PDF (opcional)
         </label>
-        <input type="file" name="archivo" accept="application/pdf">
-        <button>
+        <input class="form-control" type="file" name="archivo" accept="application/pdf">
+        <button class="btn btn-primary">
             Guardar cambios
         </button>
     </form>

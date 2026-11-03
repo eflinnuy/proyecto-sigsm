@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </head>
     <body>
         <main class="container py-4" style="max-width:750px">
-            <div class="card-accesible p-4">
+            <div class="card card-accesible shadow-sm p-4">
                 <h1>
                     <?= limpiar($encuesta['nombre']) ?>
                 </h1>
@@ -66,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?= nl2br(limpiar($encuesta['descripcion'])) ?>
                 </p>
                 <form method="post">
-                    <input type="hidden" name="encuesta_id" value="<?= $id ?>">
-                    <input type="hidden" name="survey_token" value="<?= limpiar($_SESSION['survey_token']) ?>">
+                    <input class="form-control" type="hidden" name="encuesta_id" value="<?= $id ?>">
+                    <input class="form-control" type="hidden" name="survey_token" value="<?= limpiar($_SESSION['survey_token']) ?>">
                     <?= campoCsrf() ?>
                     <label class="form-label fw-bold">
                         <?= limpiar($encuesta['pregunta'] ?? '¿Cómo valora el servicio recibido?') ?>

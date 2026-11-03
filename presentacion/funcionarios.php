@@ -116,33 +116,33 @@ require __DIR__.'/vistas/encabezado.php';
     </div>
 </div>
 
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h2><?= $edicion ? 'Modificar funcionario' : 'Agregar funcionario' ?></h2>
     <p>La contraseña se guarda protegida. Al modificar una cuenta, déjala vacía para conservar la contraseña actual.</p>
     <form method="post" autocomplete="off">
         <?= campoCsrf() ?>
-        <input type="hidden" name="accion" value="guardar">
-        <input type="hidden" name="id" value="<?= (int)($edicion['id'] ?? 0) ?>">
-        <label for="nombre">Nombre completo</label>
-        <input id="nombre" name="nombre" maxlength="100" required value="<?= limpiar($edicion['nombre'] ?? '') ?>" autocomplete="name">
-        <label for="usuario">Nombre de usuario</label>
-        <input id="usuario" name="usuario" maxlength="50" required value="<?= limpiar($edicion['usuario'] ?? '') ?>" autocomplete="username">
-        <label for="cedula">Cédula</label>
-        <input id="cedula" name="cedula" maxlength="20" minlength="5" required value="<?= limpiar($edicion['cedula'] ?? '') ?>" autocomplete="off">
-        <label for="clave"><?= $edicion ? 'Nueva contraseña (opcional)' : 'Contraseña inicial' ?></label>
+        <input class="form-control" type="hidden" name="accion" value="guardar">
+        <input class="form-control" type="hidden" name="id" value="<?= (int)($edicion['id'] ?? 0) ?>">
+        <label class="form-label" for="nombre">Nombre completo</label>
+        <input class="form-control" id="nombre" name="nombre" maxlength="100" required value="<?= limpiar($edicion['nombre'] ?? '') ?>" autocomplete="name">
+        <label class="form-label" for="usuario">Nombre de usuario</label>
+        <input class="form-control" id="usuario" name="usuario" maxlength="50" required value="<?= limpiar($edicion['usuario'] ?? '') ?>" autocomplete="username">
+        <label class="form-label" for="cedula">Cédula</label>
+        <input class="form-control" id="cedula" name="cedula" maxlength="20" minlength="5" required value="<?= limpiar($edicion['cedula'] ?? '') ?>" autocomplete="off">
+        <label class="form-label" for="clave"><?= $edicion ? 'Nueva contraseña (opcional)' : 'Contraseña inicial' ?></label>
         <div class="password-field">
-            <input id="clave" name="clave" type="password" minlength="8" <?= $edicion ? '' : 'required' ?> autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+            <input class="form-control" id="clave" name="clave" type="password" minlength="8" <?= $edicion ? '' : 'required' ?> autocomplete="new-password" placeholder="Mínimo 8 caracteres">
             <button class="password-toggle" type="button" aria-label="Mostrar contraseña" aria-controls="clave" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
-        <label for="rol">Permiso</label>
-        <select id="rol" name="rol" required>
+        <label class="form-label" for="rol">Permiso</label>
+        <select class="form-select" id="rol" name="rol" required>
             <option value="funcionario" <?= in_array(($edicion['rol'] ?? 'funcionario'), ['usuario', 'funcionario'], true) ? 'selected' : '' ?>>Médico / Funcionario</option>
             <option value="enfermero" <?= ($edicion['rol'] ?? '') === 'enfermero' ? 'selected' : '' ?>>Enfermero/a</option>
             <option value="admin" <?= ($edicion['rol'] ?? '') === 'admin' ? 'selected' : '' ?>>Administrador</option>
         </select>
         <div class="acciones-form">
-            <button type="submit"><?= $edicion ? 'Guardar cambios' : 'Crear funcionario' ?></button>
-            <?php if ($edicion): ?><a class="boton secundario" href="funcionarios.php">Cancelar</a><?php endif; ?>
+            <button class="btn btn-primary" type="submit"><?= $edicion ? 'Guardar cambios' : 'Crear funcionario' ?></button>
+            <?php if ($edicion): ?><a class="btn btn-secondary boton secundario" href="funcionarios.php">Cancelar</a><?php endif; ?>
         </div>
     </form>
 </section>
@@ -158,14 +158,14 @@ document.querySelectorAll('.password-toggle').forEach(function (button) {
 });
 </script>
 
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h2>Usuarios del panel</h2>
     <form method="get" class="buscar">
-        <input name="q" value="<?= limpiar($busqueda) ?>" placeholder="Buscar por nombre o usuario" aria-label="Buscar funcionarios">
-        <button type="submit">Buscar</button>
+        <input class="form-control" name="q" value="<?= limpiar($busqueda) ?>" placeholder="Buscar por nombre o usuario" aria-label="Buscar funcionarios">
+        <button class="btn btn-primary" type="submit">Buscar</button>
     </form>
     <div class="tabla-wrap">
-        <table>
+        <table class="table table-hover align-middle mb-0">
             <thead><tr><th>Nombre</th><th>Usuario</th><th>Permiso</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
             <?php foreach ($funcionarios as $funcionario): ?>
@@ -175,11 +175,11 @@ document.querySelectorAll('.password-toggle').forEach(function (button) {
                     <td><?= ['admin' => 'Administrador', 'enfermero' => 'Enfermero/a', 'usuario' => 'Médico / Funcionario', 'funcionario' => 'Médico / Funcionario'][$funcionario['rol']] ?? 'Sin rol' ?></td>
                     <td><?= $funcionario['activo'] ? 'Activo' : 'Inactivo' ?></td>
                     <td class="acciones-tabla">
-                        <a class="boton secundario" href="funcionarios.php?editar=<?= (int)$funcionario['id'] ?>">Modificar</a>
+                        <a class="btn btn-secondary boton secundario" href="funcionarios.php?editar=<?= (int)$funcionario['id'] ?>">Modificar</a>
                         <form method="post" onsubmit="return confirm('¿<?= $funcionario['activo'] ? 'Desactivar' : 'Activar' ?> esta cuenta?');">
                             <?= campoCsrf() ?>
-                            <input type="hidden" name="accion" value="estado">
-                            <input type="hidden" name="id" value="<?= (int)$funcionario['id'] ?>">
+                            <input class="form-control" type="hidden" name="accion" value="estado">
+                            <input class="form-control" type="hidden" name="id" value="<?= (int)$funcionario['id'] ?>">
                             <button class="<?= $funcionario['activo'] ? 'peligro' : '' ?>" type="submit"><?= $funcionario['activo'] ? 'Desactivar' : 'Activar' ?></button>
                         </form>
                     </td>

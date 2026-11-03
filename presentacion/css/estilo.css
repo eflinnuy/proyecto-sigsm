@@ -1,6 +1,28 @@
 * {
     box-sizing: border-box;
 }
+:root {
+    --bs-primary: #1f4e5f;
+    --bs-primary-rgb: 31, 78, 95;
+    --bs-link-color: #1f4e5f;
+    --bs-link-hover-color: #163c49;
+}
+.btn-primary {
+    --bs-btn-bg: #1f4e5f;
+    --bs-btn-border-color: #1f4e5f;
+    --bs-btn-hover-bg: #163c49;
+    --bs-btn-hover-border-color: #163c49;
+    --bs-btn-active-bg: #12323d;
+    --bs-btn-active-border-color: #12323d;
+}
+.btn-secondary {
+    --bs-btn-bg: #65727a;
+    --bs-btn-border-color: #65727a;
+}
+.btn-danger {
+    --bs-btn-bg: #a83232;
+    --bs-btn-border-color: #a83232;
+}
 body {
     margin: 0;
     font-family: Arial,sans-serif;

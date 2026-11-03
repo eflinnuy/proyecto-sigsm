@@ -20,11 +20,12 @@ $captcha = preguntaCaptcha();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f766e">
     <title><?= limpiar($titulo) ?> | SIGSM</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/login_sistema.css">
 </head>
 <body class="login-page">
-<main class="login-wrapper">
-    <section class="login-left" aria-label="Hospital de Clínicas">
+<main class="login-wrapper row g-0">
+    <section class="login-left col-lg-7" aria-label="Hospital de Clínicas">
         <div class="login-overlay">
             <a class="login-brand" href="index.php" aria-label="SIGSM, inicio">
                 <img class="hc-logo" src="img/logo-hc.svg" alt="Hospital de Clínicas">
@@ -37,8 +38,8 @@ $captcha = preguntaCaptcha();
             <p class="login-credit">Gestión clara para una atención conectada.</p>
         </div>
     </section>
-    <section class="login-right" aria-labelledby="login-title">
-        <div class="login-box">
+    <section class="login-right col-lg-5" aria-labelledby="login-title">
+        <div class="login-box card shadow-sm">
             <div class="mobile-brand"><img class="hc-logo" src="img/logo-hc.svg" alt="Hospital de Clínicas"></div>
             <p class="form-eyebrow">ACCESO INSTITUCIONAL</p>
             <h2 id="login-title">Bienvenido/a</h2>
@@ -48,18 +49,18 @@ $captcha = preguntaCaptcha();
             <?php endif; ?>
             <form action="../login.php" method="post" class="login-form">
                 <?= campoCsrf() ?>
-                <label for="usuario">Usuario</label>
-                <input id="usuario" type="text" name="usuario" required maxlength="50" autocomplete="username" placeholder="Tu usuario">
-                <label for="clave">Contraseña</label>
+                <label class="form-label" for="usuario">Usuario</label>
+                <input class="form-control" id="usuario" type="text" name="usuario" required maxlength="50" autocomplete="username" placeholder="Tu usuario">
+                <label class="form-label" for="clave">Contraseña</label>
                 <div class="password-field">
-                    <input id="clave" type="password" name="clave" required autocomplete="current-password" placeholder="Tu contraseña">
+                    <input class="form-control" id="clave" type="password" name="clave" required autocomplete="current-password" placeholder="Tu contraseña">
                     <button class="password-toggle" type="button" aria-label="Mostrar contraseña" aria-controls="clave" aria-pressed="false">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>
                 </div>
-                <label for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
-                <input id="captcha" type="number" name="captcha" required inputmode="numeric" autocomplete="off" placeholder="Escribe el resultado">
-                <button class="submit-button" type="submit">Ingresar al sistema</button>
+                <label class="form-label" for="captcha">Verificación: ¿cuánto es <?= limpiar($captcha) ?>?</label>
+                <input class="form-control" id="captcha" type="number" name="captcha" required inputmode="numeric" autocomplete="off" placeholder="Escribe el resultado">
+                <button class="submit-button btn btn-primary" type="submit">Ingresar al sistema</button>
             </form>
             <a class="recovery-link" href="recuperar.php">¿Olvidaste tu contraseña?</a>
             <div class="access-note"><span aria-hidden="true">●</span> Acceso exclusivo para personal autorizado</div>
@@ -78,5 +79,6 @@ document.querySelectorAll('.password-toggle').forEach(function (button) {
     });
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>

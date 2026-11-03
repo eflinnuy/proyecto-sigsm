@@ -16,7 +16,7 @@ $qrSvg = generarQrSvg($url);
 $titulo = $d['titulo'];
 require __DIR__ . '/vistas/encabezado.php';
  ?>
-<section class="documento">
+<section class="card shadow-sm documento">
     <span class="etiqueta"> <?= limpiar($d['categoria']) ?></span>
     <h1>
         <?= limpiar($d['titulo']) ?>
@@ -29,9 +29,9 @@ require __DIR__ . '/vistas/encabezado.php';
         <p>
             <b>Acceso para pacientes</b><br>Escanee este código con la cámara del celular para abrir el portal público.
         </p>
-        <input readonly value="<?= limpiar($url) ?>" onclick="this.select()">
+        <input class="form-control" readonly value="<?= limpiar($url) ?>" onclick="this.select()">
     </div>
-    <a class="boton" href="<?= 'descargar_documento.php?id='.(int)$d['id'] ?>" target="_blank"> Abrir PDF</a> <br> <br> <a href="documentos.php"> Volver</a>
+    <a class="btn btn-primary boton" href="<?= 'descargar_documento.php?id='.(int)$d['id'] ?>" target="_blank"> Abrir PDF</a> <br> <br> <a href="documentos.php"> Volver</a>
 </section>
 <?php
 require __DIR__ . '/vistas/pie.php';

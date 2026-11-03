@@ -72,41 +72,41 @@ require __DIR__ . '/vistas/encabezado.php';
         </p>
     </div>
 </div>
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h2>
         <?= $edicion ? 'Editar encuesta' : 'Nueva encuesta' ?>
     </h2>
     <form method="post">
         <?= campoCsrf() ?>
-        <input type="hidden" name="accion" value="<?= $edicion ? 'guardar' : 'crear' ?>">
-        <input type="hidden" name="id" value="<?= (int)($edicion['id'] ?? 0) ?>">
-        <label>
+        <input class="form-control" type="hidden" name="accion" value="<?= $edicion ? 'guardar' : 'crear' ?>">
+        <input class="form-control" type="hidden" name="id" value="<?= (int)($edicion['id'] ?? 0) ?>">
+        <label class="form-label">
             Nombre
         </label>
-        <input name="nombre" maxlength="150" required placeholder="Ej.: Evaluar atención general" value="<?= limpiar($edicion['nombre'] ?? '') ?>">
-        <label>
+        <input class="form-control" name="nombre" maxlength="150" required placeholder="Ej.: Evaluar atención general" value="<?= limpiar($edicion['nombre'] ?? '') ?>">
+        <label class="form-label">
             Pregunta de valoración
         </label>
-        <input name="pregunta" maxlength="250" required placeholder="¿Cómo valora la atención recibida?" value="<?= limpiar($edicion['pregunta'] ?? '') ?>">
-        <label>
+        <input class="form-control" name="pregunta" maxlength="250" required placeholder="¿Cómo valora la atención recibida?" value="<?= limpiar($edicion['pregunta'] ?? '') ?>">
+        <label class="form-label">
             Descripción
         </label>
-        <textarea name="descripcion" rows="3" maxlength="500" placeholder="Explique brevemente qué se quiere evaluar."><?= limpiar($edicion['descripcion'] ?? '') ?></textarea>
-        <label>Servicio</label>
-        <select name="servicio_id"><option value="">General</option><?php foreach ($servicios as $servicio): ?><option value="<?= (int)$servicio['id'] ?>" <?= (int)($edicion['servicio_id'] ?? 0) === (int)$servicio['id'] ? 'selected' : '' ?>><?= limpiar($servicio['nombre']) ?></option><?php endforeach; ?></select>
-        <button>
+        <textarea class="form-control" name="descripcion" rows="3" maxlength="500" placeholder="Explique brevemente qué se quiere evaluar."><?= limpiar($edicion['descripcion'] ?? '') ?></textarea>
+        <label class="form-label">Servicio</label>
+        <select class="form-select" name="servicio_id"><option value="">General</option><?php foreach ($servicios as $servicio): ?><option value="<?= (int)$servicio['id'] ?>" <?= (int)($edicion['servicio_id'] ?? 0) === (int)$servicio['id'] ? 'selected' : '' ?>><?= limpiar($servicio['nombre']) ?></option><?php endforeach; ?></select>
+        <button class="btn btn-primary">
             <?= $edicion ? 'Guardar cambios' : 'Crear encuesta' ?>
         </button>
-        <?php if ($edicion): ?> <a class="boton secundario" href="encuestas_admin.php">Cancelar</a><?php endif; ?>
+        <?php if ($edicion): ?> <a class="btn btn-secondary boton secundario" href="encuestas_admin.php">Cancelar</a><?php endif; ?>
     </form>
 </section>
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h2>
         Encuestas creadas
     </h2>
-    <form method="get" class="buscar"><input name="q" value="<?= limpiar($q) ?>" placeholder="Buscar por título o servicio"><button>Buscar</button></form>
+    <form method="get" class="buscar"><input class="form-control" name="q" value="<?= limpiar($q) ?>" placeholder="Buscar por título o servicio"><button class="btn btn-primary">Buscar</button></form>
     <div class="tabla-wrap">
-        <table>
+        <table class="table table-hover align-middle mb-0">
             <thead>
                 <tr>
                     <th>
@@ -146,11 +146,11 @@ foreach ($lista as $e) :
                     <td><?= $e['promedio'] ?? '-' ?></td>
                     <td><?php for ($puntaje=1;$puntaje<=5;$puntaje++): ?><?= $puntaje ?>: <?= (int)($e['p'.$puntaje] ?? 0) ?><?= $puntaje<5 ? ' · ' : '' ?><?php endfor; ?></td>
                     <td>
-                        <a class="boton secundario" href="encuestas_admin.php?editar=<?= (int)$e['id'] ?>">Editar</a>
+                        <a class="btn btn-secondary boton secundario" href="encuestas_admin.php?editar=<?= (int)$e['id'] ?>">Editar</a>
                         <form method="post">
         <?= campoCsrf() ?>
-                            <input type="hidden" name="accion" value="cambiar"> <input type="hidden" name="id" value="<?= $e['id'] ?>">
-                            <button class="secundario">
+                            <input class="form-control" type="hidden" name="accion" value="cambiar"> <input class="form-control" type="hidden" name="id" value="<?= $e['id'] ?>">
+                            <button class="btn btn-secondary secundario">
                                 <?= $e['activa'] ? 'Pausar' : 'Activar' ?>
                             </button>
                         </form>
@@ -163,10 +163,10 @@ endforeach;
         </table>
     </div>
 </section>
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h2>Respuestas recibidas</h2>
     <div class="tabla-wrap">
-        <table>
+        <table class="table table-hover align-middle mb-0">
             <thead>
                 <tr>
                     <th>Fecha</th>

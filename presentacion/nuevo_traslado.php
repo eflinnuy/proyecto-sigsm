@@ -40,55 +40,55 @@ $titulo = $edit ? 'Editar traslado' : 'Nuevo traslado';
 require __DIR__ . '/vistas/encabezado.php';
 $d = $dato ?: ['paciente' => '', 'chofer' => '', 'enfermero' => '', 'vehiculo' => '', 'origen' => 'Hospital de Clínicas', 'destino' => '', 'salida' => '', 'llegada' => '', 'estado' => 'Solicitado'];
  ?>
-<section class="tarjeta">
+<section class="card shadow-sm tarjeta">
     <h1>
         <?= $edit ? 'Editar' : 'Nuevo' ?> traslado
     </h1>
     <form method="post">
         <?= campoCsrf() ?>
-        <label>
+        <label class="form-label">
             Paciente o elemento *
         </label>
-        <input name="paciente" value="<?= limpiar($d['paciente']) ?>" required>
-        <label>
+        <input class="form-control" name="paciente" value="<?= limpiar($d['paciente']) ?>" required>
+        <label class="form-label">
             Chofer *
         </label>
-        <input name="chofer" value="<?= limpiar($d['chofer']) ?>" required>
-        <label>
+        <input class="form-control" name="chofer" value="<?= limpiar($d['chofer']) ?>" required>
+        <label class="form-label">
             Enfermero *
         </label>
-        <input name="enfermero" value="<?= limpiar($d['enfermero']) ?>" required>
-        <label>
+        <input class="form-control" name="enfermero" value="<?= limpiar($d['enfermero']) ?>" required>
+        <label class="form-label">
             Vehículo
         </label>
-        <input name="vehiculo" value="<?= limpiar($d['vehiculo']) ?>" placeholder="Ambulancia 01">
-        <label>
+        <input class="form-control" name="vehiculo" value="<?= limpiar($d['vehiculo']) ?>" placeholder="Ambulancia 01">
+        <label class="form-label">
             Origen *
         </label>
-        <input name="origen" value="<?= limpiar($d['origen']) ?>" required>
-        <label>
+        <input class="form-control" name="origen" value="<?= limpiar($d['origen']) ?>" required>
+        <label class="form-label">
             Destino *
         </label>
-        <input name="destino" value="<?= limpiar($d['destino']) ?>" required>
-        <label>
+        <input class="form-control" name="destino" value="<?= limpiar($d['destino']) ?>" required>
+        <label class="form-label">
             Hora de salida
         </label>
-        <input type="datetime-local" name="salida" value="<?= $d['salida'] ? date('Y-m-d\\TH:i', strtotime($d['salida'])) : '' ?>">
-        <label>
+        <input class="form-control" type="datetime-local" name="salida" value="<?= $d['salida'] ? date('Y-m-d\\TH:i', strtotime($d['salida'])) : '' ?>">
+        <label class="form-label">
             Hora de llegada
         </label>
-        <input type="datetime-local" name="llegada" value="<?= $d['llegada'] ? date('Y-m-d\\TH:i', strtotime($d['llegada'])) : '' ?>">
-        <label>
+        <input class="form-control" type="datetime-local" name="llegada" value="<?= $d['llegada'] ? date('Y-m-d\\TH:i', strtotime($d['llegada'])) : '' ?>">
+        <label class="form-label">
             Estado
         </label>
-        <select name="estado">
+        <select class="form-select" name="estado">
             <?php
 foreach (['Solicitado', 'En camino', 'Realizado', 'Cancelado'] as $e) :
  ?> <option <?= $d['estado'] === $e ? 'selected' : '' ?>> <?= $e ?></option> <?php
 endforeach;
  ?>
         </select>
-        <button>
+        <button class="btn btn-primary">
             Guardar
         </button>
     </form>
