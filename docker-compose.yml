@@ -18,7 +18,7 @@ services:
       - eflinn_network
 
   # Aplica cambios de esquema también cuando el volumen MySQL ya existía.
- eflinn_migrate:
+  eflinn_migrate:
     image: mysql:8.0
     depends_on:
       eflinn_db:
