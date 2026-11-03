@@ -18,13 +18,11 @@ services:
       - eflinn_network
 
   # Aplica cambios de esquema también cuando el volumen MySQL ya existía.
-  eflinn_migrate:
+ eflinn_migrate:
     image: mysql:8.0
     depends_on:
       eflinn_db:
         condition: service_healthy
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
     volumes:
       - ./sql/migracion_encuestas_seguridad.sql:/migracion_encuestas_seguridad.sql:ro
       - ./sql/migracion_roles_personal.sql:/migracion_roles_personal.sql:ro
@@ -32,9 +30,9 @@ services:
     entrypoint: ["sh", "-c"]
     command:
       - |
-        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$MYSQL_ROOT_PASSWORD" sigsm < /migracion_encuestas_seguridad.sql &&
-        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$MYSQL_ROOT_PASSWORD" sigsm < /migracion_roles_personal.sql &&
-        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -p"$MYSQL_ROOT_PASSWORD" sigsm < /migracion_cedula_funcionarios.sql
+        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -proot sigsm < /migracion_encuestas_seguridad.sql &&
+        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -proot sigsm < /migracion_roles_personal.sql &&
+        mysql --default-character-set=utf8mb4 -h eflinn_db -u root -proot sigsm < /migracion_cedula_funcionarios.sql
     networks:
       - eflinn_network
   eflinn_db:
