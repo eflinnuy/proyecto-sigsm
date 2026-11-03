@@ -6,7 +6,7 @@
  */
 $servidor = getenv('DB_HOST') ?: '192.168.2.89';
 $base = getenv('DB_NAME') ?: 'sigsm';
-$usuarioBD = getenv('DB_USER') ?: 'root';
+$usuarioBD = getenv('DB_USER') ?: 'sigsm_app';
 $claveBD = getenv('DB_PASSWORD') ?: 'root';
 try {
     $pdo = new PDO("mysql:host=$servidor;dbname=$base;charset=utf8mb4", $usuarioBD, $claveBD);
