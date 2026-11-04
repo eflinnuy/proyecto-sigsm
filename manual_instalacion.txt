@@ -1,16 +1,169 @@
-MANUAL DE INSTALACIÓN - SIGSM
+MANUAL DE INSTALACIÓN - SIGSM CON DOCKER
+========================================
 
-1. Instalar XAMPP y activar Apache y MySQL.
-2. Copiar la carpeta sigsm dentro de htdocs.
-3. Abrir phpMyAdmin y ejecutar sql/sigsm.sql.
-4. Revisar datos/conexion.php si las credenciales son diferentes.
-5. Abrir http://localhost/sigsm/
+Este procedimiento está pensado para Fedora Linux, como el usado en la
+documentación de instalación. SIGSM se ejecuta en contenedores: Apache y PHP
+van en el contenedor de la aplicación y MySQL en otro contenedor. No es
+necesario instalar XAMPP ni ejecutar phpMyAdmin.
 
-El archivo sql/sigsm.sql crea y selecciona la base "sigsm". Para una base
-existente, ejecuta sql/migracion_roles_personal.sql en phpMyAdmin. Conserva las
-cuentas y convierte el rol antiguo "usuario" a "funcionario". Administra los
-perfiles desde Panel > Funcionarios.
+1. REQUISITOS DEL SERVIDOR
+--------------------------
+- Fedora en una versión mantenida, con acceso a una cuenta con sudo.
+- Docker Engine, Docker CLI y el complemento Docker Compose v2.
+- Git para obtener el código fuente.
+- Puertos 3500 y 33060 disponibles en el servidor.
 
-Usuarios de prueba:
-admin / 1234
-usuario / 1234
+Instalar Docker Engine desde el repositorio oficial de Docker para Fedora:
+https://docs.docker.com/engine/install/fedora/
+
+Actualizar los metadatos de DNF e instalar Git y las herramientas del
+repositorio de Docker:
+
+    sudo dnf makecache
+    sudo dnf install git dnf-plugins-core
+    sudo dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
+    sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+Iniciar Docker y configurarlo para que arranque con Fedora:
+
+    sudo systemctl enable --now docker
+
+Comprobar que Docker y Compose estén disponibles:
+
+    sudo docker --version
+    sudo docker compose version
+    sudo systemctl status docker
+    sudo docker run hello-world
+
+Si ya había una versión de Docker u otro motor de contenedores en el
+servidor, revisar los paquetes en conflicto antes de quitarlos. No eliminar
+paquetes ni datos de contenedores existentes sin confirmar qué servicio los usa.
+
+Fedora puede usar firewalld. Si se accederá a SIGSM desde otros equipos y el
+cortafuegos está activo, permitir el puerto web de la aplicación:
+
+    sudo firewall-cmd --permanent --add-port=3500/tcp
+    sudo firewall-cmd --reload
+
+No es necesario abrir el puerto MySQL 33060 para usar SIGSM desde la aplicación.
+
+Si el usuario tiene permisos para ejecutar Docker sin sudo, puede omitir `sudo`
+en los comandos siguientes.
+
+2. OBTENER EL PROYECTO
+----------------------
+Clonar el repositorio del proyecto en el servidor (reemplazar la dirección por
+la URL real del repositorio):
+
+    cd /var/www/html
+    sudo git clone <URL_DEL_REPOSITORIO_SIGSM> sigsm
+    cd /var/www/html/sigsm
+
+Si el código ya está en el servidor, entrar a la carpeta que contiene
+`docker-compose.yml`, `Dockerfile` y la carpeta `sql`:
+
+    cd /var/www/html/sigsm
+    ls
+
+El archivo `docker-compose.yml` debe estar en el directorio actual. Ejecutar
+Compose desde la carpeta del proyecto, no desde `sql` ni desde `/var/www/html`.
+
+3. CONFIGURAR CREDENCIALES (OPCIONAL)
+-------------------------------------
+Compose usa estos valores locales de desarrollo si no se definen variables:
+
+    MYSQL_ROOT_PASSWORD=root
+    SIGSM_DB_PASSWORD=sigsm_local
+
+Para usar contraseñas propias, definirlas en la misma terminal antes del primer
+arranque. Cambiar ambos valores por contraseñas seguras:
+
+    export MYSQL_ROOT_PASSWORD='CAMBIAR_POR_UNA_CLAVE_SEGURA'
+    export SIGSM_DB_PASSWORD='CAMBIAR_POR_OTRA_CLAVE_SEGURA'
+
+Mantener esas variables en la terminal al ejecutar Compose. La contraseña de
+la aplicación debe coincidir en los dos servicios; Compose la configura tanto
+en MySQL como en SIGSM. En despliegues existentes, cambiar una variable de
+entorno no cambia automáticamente la contraseña que MySQL ya guardó en su
+volumen.
+
+4. CONSTRUIR E INICIAR SIGSM
+----------------------------
+Desde `/var/www/html/sigsm`, construir las imágenes e iniciar los servicios en
+segundo plano:
+
+    sudo docker compose up --build -d
+
+La primera ejecución descarga las imágenes necesarias, construye la imagen de
+SIGSM e inicia MySQL. La base `sigsm` se crea y `sql/sigsm.sql` se importa al
+crear el volumen de MySQL por primera vez. Luego el servicio de migración aplica
+automáticamente las migraciones de seguridad/encuestas, roles y cédula antes de
+iniciar la aplicación.
+
+Comprobar los contenedores:
+
+    sudo docker compose ps
+
+La aplicación debe quedar publicada en el puerto 3500. En el servidor, abrir:
+
+    http://localhost:3500/
+
+Desde otro equipo, usar `http://IP_DEL_SERVIDOR:3500/` y comprobar que el
+cortafuegos permita conexiones al puerto 3500.
+
+5. CUENTAS INICIALES
+--------------------
+La base de datos incluye cuentas de prueba:
+
+    admin / 1234
+    usuario / 1234
+
+La cuenta `admin` tiene perfil de administrador. La cuenta `usuario` tiene el
+perfil Médico / Funcionario. Cambiar las contraseñas de prueba antes de usar el
+sistema con información real. Las cuentas se insertan al inicializar una base
+nueva; si la base ya tenía cuentas, la importación no las reemplaza.
+
+6. DETENER, REINICIAR Y ACTUALIZAR
+----------------------------------
+Detener los contenedores sin borrar la base de datos:
+
+    sudo docker compose down
+
+Volver a iniciarlos:
+
+    sudo docker compose up -d
+
+Después de actualizar el código del repositorio, reconstruir la aplicación:
+
+    sudo docker compose up --build -d
+
+El volumen `db-volume` conserva la base de datos aunque se detengan o eliminen
+los contenedores. No usar `sudo docker compose down -v` para una detención
+normal: la opción `-v` elimina el volumen y sus datos.
+
+7. REVISIÓN DE ERRORES
+----------------------
+Ver el estado de los servicios y los registros:
+
+    sudo docker compose ps -a
+    sudo docker compose logs --tail=100
+    sudo docker compose logs --tail=100 eflinn_db
+    sudo docker compose logs --tail=100 eflinn_migrate
+    sudo docker compose logs --tail=100 eflinn_app
+
+- Si el puerto 3500 o 33060 ya está ocupado, liberar ese puerto o cambiar el
+  mapeo correspondiente en `docker-compose.yml` y volver a construir/iniciar.
+- Si la aplicación no conecta con MySQL, comprobar que `eflinn_db` aparezca
+  activo y que la migración `eflinn_migrate` haya finalizado correctamente.
+- Si es una instalación con un volumen de MySQL existente, `sql/sigsm.sql` no
+  se vuelve a importar automáticamente. Las migraciones del proyecto sí se
+  ejecutan al iniciar Compose.
+- No borrar `db-volume` como método de solución sin antes respaldar la base:
+  eliminarlo borra la información almacenada.
+
+CONFIGURACIÓN DEL PROYECTO
+--------------------------
+El puerto de la aplicación y los servicios están definidos en
+`docker-compose.yml`. PHP y Apache se preparan en `Dockerfile`. La conexión
+PHP toma el host, la base, el usuario y la contraseña desde las variables de
+entorno configuradas por Compose.
