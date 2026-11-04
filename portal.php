@@ -136,7 +136,7 @@ endif;
                 </div>
             </section>
         </main>
-        <footer class="bg-dark text-white text-center p-4 mt-5">
+        <footer class="bg-primary text-white text-center p-4 mt-5">
             <p class="fs-5 mb-2">
                 Hospital de Clínicas
             </p>

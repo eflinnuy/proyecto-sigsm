@@ -2,35 +2,37 @@
     box-sizing: border-box;
 }
 :root {
-    --bs-primary: #1f4e5f;
-    --bs-primary-rgb: 31, 78, 95;
-    --bs-link-color: #1f4e5f;
-    --bs-link-hover-color: #163c49;
+    --bs-primary: #0f766e;
+    --bs-primary-rgb: 15, 118, 110;
+    --bs-link-color: #0f766e;
+    --bs-link-hover-color: #115e59;
+    --bs-danger: #ef4444;
+    --bs-danger-rgb: 239, 68, 68;
 }
 .btn-primary {
-    --bs-btn-bg: #1f4e5f;
-    --bs-btn-border-color: #1f4e5f;
-    --bs-btn-hover-bg: #163c49;
-    --bs-btn-hover-border-color: #163c49;
-    --bs-btn-active-bg: #12323d;
-    --bs-btn-active-border-color: #12323d;
+    --bs-btn-bg: #0f766e;
+    --bs-btn-border-color: #0f766e;
+    --bs-btn-hover-bg: #115e59;
+    --bs-btn-hover-border-color: #115e59;
+    --bs-btn-active-bg: #115e59;
+    --bs-btn-active-border-color: #115e59;
 }
 .btn-secondary {
-    --bs-btn-bg: #65727a;
-    --bs-btn-border-color: #65727a;
+    --bs-btn-bg: #1f2937;
+    --bs-btn-border-color: #1f2937;
 }
 .btn-danger {
-    --bs-btn-bg: #a83232;
-    --bs-btn-border-color: #a83232;
+    --bs-btn-bg: #ef4444;
+    --bs-btn-border-color: #ef4444;
 }
 body {
     margin: 0;
     font-family: Arial,sans-serif;
-    background: #f1f4f7;
-    color: #263238;
+    background: #eef2f6;
+    color: #1f2937;
 }
 header {
-    background: #1f4e5f;
+    background: #0f766e;
     color: white;
     position: relative;
     z-index: 10;
@@ -64,7 +66,7 @@ header {
     border-radius: 6px;
 }
 .nav-links a:hover {
-    background: #316b7d;
+    background: #115e59;
 }
 .menu-toggle {
     display: none;
@@ -85,7 +87,7 @@ header {
     margin-bottom: 20px;
 }
 .hero {
-    background: #e0f0f3;
+    background: #e6f4f1;
 }
 .tarjetas {
     display: grid;
@@ -105,7 +107,7 @@ header {
 }
 .boton, button {
     display: inline-block;
-    background: #1f4e5f;
+    background: #0f766e;
     color: white;
     border: 0;
     padding: 11px 16px;
@@ -114,13 +116,13 @@ header {
     cursor: pointer;
 }
 .boton:hover, button:hover {
-    background: #163c49;
+    background: #115e59;
 }
 .secundario {
-    background: #65727a;
+    background: #1f2937;
 }
 .peligro {
-    background: #a83232;
+    background: #ef4444;
 }
 .acciones-form, .acciones-tabla {
     display: flex;
@@ -143,10 +145,14 @@ form {
 input, select, textarea {
     width: 100%;
     padding: 11px;
-    border: 1px solid #c8d0d5;
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
     font: inherit;
     margin-bottom: 8px;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #0f766e;
+    box-shadow: 0 0 0 .25rem rgba(15, 118, 110, .12);
 }
 label {
     font-weight: bold;
@@ -174,13 +180,13 @@ label {
     display: grid;
     place-items: center;
     padding: 8px;
-    color: #52636b;
+    color: #64748b;
     background: transparent;
     border-radius: 5px;
 }
 .password-toggle:hover, .password-toggle:focus-visible {
-    color: #1f4e5f;
-    background: #eaf0f2;
+    color: #0f766e;
+    background: #eef2f6;
 }
 .password-toggle svg {
     width: 21px;
@@ -190,7 +196,7 @@ label {
     stroke-width: 1.8;
 }
 .ayuda {
-    background: #f2f5f6;
+    background: #eef2f6;
     padding: 12px;
     border-radius: 7px;
     margin-top: 15px;
@@ -219,12 +225,12 @@ table {
 }
 th, td {
     padding: 11px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #cbd5e1;
     text-align: left;
     vertical-align: top;
 }
 th {
-    background: #edf2f4;
+    background: #eef2f6;
 }
 .mensaje {
     padding: 12px;
@@ -235,11 +241,12 @@ th {
     background: #dff3e5;
 }
 .mensaje.error {
-    background: #ffe0e0;
+    background: #fef2f2;
+    color: #ef4444;
 }
 .etiqueta {
     display: inline-block;
-    background: #dceef2;
+    background: #e6f4f1;
     padding: 5px 9px;
     border-radius: 20px;
     font-size: 13px;
@@ -247,7 +254,7 @@ th {
 .qr {
     margin: 25px 0;
     padding: 20px;
-    background: #f4f7f8;
+    background: #eef2f6;
     border-radius: 10px;
 }
 .imagen-qr {
@@ -270,12 +277,12 @@ th {
 }
 .mini-logo {
     font-weight: bold;
-    color: #1f4e5f;
+    color: #0f766e;
 }
 footer {
     text-align: center;
     padding: 25px;
-    color: #68747a;
+    color: #64748b;
 }
 @media(max-width:750px) {
     .barra {
@@ -319,7 +326,7 @@ footer {
         border: 1px solid #ffffff80;
     }
     .menu-toggle:hover, .menu-toggle:focus-visible {
-        background: #316b7d;
+        background: #115e59;
     }
     .menu-toggle span {
         width: 22px;
@@ -338,7 +345,7 @@ footer {
         padding: 12px;
         flex-direction: column;
         align-items: stretch;
-        background: #1f4e5f;
+        background: #0f766e;
         box-shadow: 0 8px 14px #0003;
     }
     .nav-links.abierto {
