@@ -1,10 +1,152 @@
 MANUAL DE USUARIO - SIGSM
+=========================
 
-ADMINISTRADOR
-Ingresar con admin / 1234. Puede administrar documentos, encuestas y traslados.
+ACCESO AL SISTEMA
+-----------------
+Abra la dirección de SIGSM en el navegador. En la instalación Docker local,
+la dirección es:
 
-USUARIO BÁSICO
-Ingresar con usuario / 1234. No tiene acceso a las funciones administrativas.
+    http://localhost:3500/
 
-PACIENTE
-Entrar al Portal del Paciente sin usuario ni contraseña para consultar documentos y responder encuestas activas.
+Si SIGSM está instalado en otro equipo, use la dirección IP de ese servidor y
+el puerto 3500. Para ingresar al panel, escriba su nombre de usuario y
+contraseña, resuelva la operación matemática que aparece en «Verificación» y
+seleccione «Ingresar al sistema». La operación cambia; escriba el resultado
+que muestra su pantalla.
+
+Las cuentas del personal son individuales. Use las credenciales que le entregó
+el administrador y no comparta su contraseña. Para salir de la sesión, elija
+«Salir» en el menú superior.
+
+CUENTAS Y PERFILES DEL ENTORNO MOSTRADO
+---------------------------------------
+La primera captura muestra estas cuentas activas. Los nombres y usuarios sirven
+como referencia para el entorno de la captura; pueden cambiar en otra
+instalación.
+
+| Nombre | Usuario | Perfil |
+|---|---|---|
+| Administrador del sistema | `admin` | Administrador |
+| Emmanuel Lacerda | `Plemma_1891` | Médico / Funcionario |
+| Facundo Jorge | `facurj` | Administrador |
+| Mateo Gonzalez | `thamatthew` | Administrador |
+| Nicolas Torres | `nicobi` | Médico / Funcionario |
+| Usuario básico | `usuario` | Médico / Funcionario |
+| Vladimir Rodriguez | `vladirod` | Enfermero/a |
+
+En una base de datos nueva se crean las cuentas de prueba `admin` y `usuario`,
+ambas con contraseña inicial `1234`. Las demás cuentas de la tabla pertenecen
+al entorno mostrado y se debe usar la contraseña asignada por el administrador.
+Cambie las contraseñas de prueba antes de usar el sistema con información real.
+
+PERFILES Y PERMISOS
+-------------------
+
+Administrador
+- Administra documentos e indicaciones.
+- Crea y administra encuestas y consulta sus resultados.
+- Registra y actualiza traslados.
+- Administra las cuentas del personal desde «Funcionarios».
+- Puede abrir el Portal del Paciente.
+
+Médico / Funcionario
+- Administra documentos e indicaciones.
+- Crea y administra encuestas y consulta sus resultados.
+- No tiene permiso para consultar ni modificar traslados.
+- Puede abrir el Portal del Paciente.
+
+Enfermero/a
+- Consulta el panel y los traslados.
+- Registra traslados y actualiza su seguimiento.
+- Puede abrir el Portal del Paciente.
+
+Portal del Paciente
+- Es público: el paciente no necesita una cuenta del panel.
+- Permite consultar documentos activos y responder encuestas activas.
+
+USO DEL PANEL
+-------------
+Después de ingresar, use las opciones del menú superior según su perfil. «Funcionarios»
+solo está disponible para administradores. Aunque el enlace «Traslados» aparezca en
+el menú, solo administradores y enfermeros pueden abrir y gestionar esa sección.
+
+Documentos e indicaciones
+1. Abra «Documentos».
+2. Para publicar un documento, elija «Nuevo documento».
+3. Complete el título, la categoría y, si corresponde, una descripción.
+4. Seleccione un archivo PDF de menos de 5 MB y guárdelo.
+5. En la lista de documentos puede consultar o administrar los documentos
+   disponibles. El contenido activo aparece en el Portal del Paciente.
+
+Encuestas
+1. Abra «Encuestas» y elija crear una encuesta.
+2. Escriba el nombre, la pregunta y, opcionalmente, una descripción.
+3. Seleccione un servicio o deje «General» si no corresponde a un servicio
+   específico. Guarde la encuesta.
+4. En la lista puede editarla, activar o pausar su publicación y revisar la
+   cantidad de respuestas, el promedio y la distribución de puntuaciones.
+5. Las encuestas activas aparecen en el Portal del Paciente. El paciente elige
+   una puntuación de 1 a 5 y puede agregar un comentario opcional.
+
+Traslados
+1. Abra «Traslados» y seleccione «Nuevo traslado» para registrar uno.
+2. Complete los datos solicitados, como paciente o elemento, chofer, enfermero,
+   origen, destino, vehículo y estado.
+3. Guarde el registro. En la lista puede buscar por paciente, destino o estado.
+4. Use «Actualizar seguimiento» para modificar el estado y los datos del
+   traslado. Solo administradores y enfermeros pueden consultar la lista, registrar
+   traslados y actualizar su seguimiento.
+
+PORTAL DEL PACIENTE
+-------------------
+Desde el menú del panel, seleccione «Abrir portal». También puede abrir la
+página pública del portal usando la dirección del servidor y `/portal.php`;
+por ejemplo:
+
+    http://localhost:3500/portal.php
+
+En «Documentos e Indicaciones», elija una categoría para ver los documentos.
+Puede abrirlos o descargarlos. En «Encuestas de Satisfacción», seleccione una
+encuesta activa, marque una puntuación de 1 (muy mala) a 5 (muy buena), agregue
+un comentario si lo desea y envíe la respuesta. El sistema evita duplicar
+el envío del mismo formulario.
+
+GESTIÓN DE CUENTAS DEL PERSONAL
+-------------------------------
+Esta sección solo está disponible para el perfil Administrador. Abra
+«Funcionarios» para buscar cuentas, revisar su estado y administrarlas.
+
+Crear una cuenta
+1. En «Agregar funcionario», escriba el nombre completo y un nombre de usuario.
+2. Ingrese la cédula y establezca una contraseña inicial de al menos 8
+   caracteres.
+3. Elija el permiso: «Administrador», «Médico / Funcionario» o «Enfermero/a».
+4. Seleccione «Crear funcionario». El usuario y la cédula deben ser únicos.
+5. Entregue al nuevo usuario sus credenciales de forma privada.
+
+Modificar una cuenta
+1. Busque a la persona por nombre o nombre de usuario.
+2. Seleccione «Modificar» y actualice los datos o el permiso.
+3. Si no va a cambiar la contraseña, deje vacío el campo de nueva contraseña.
+   Si la cambia, debe tener al menos 8 caracteres.
+4. Seleccione «Guardar cambios».
+
+Activar o desactivar una cuenta
+- «Desactivar» impide que la persona inicie sesión y conserva sus registros.
+- Si la cuenta está desactivada, puede volver a habilitarse desde la lista.
+- El administrador no puede desactivar su propia cuenta ni dejar el sistema sin
+  al menos un administrador activo.
+
+RECUPERAR LA CONTRASEÑA
+-----------------------
+En la pantalla de ingreso, seleccione «¿Olvidaste tu contraseña?». El proceso
+solicita el nombre de usuario, la cédula registrada y la verificación
+matemática. Si los datos coinciden, permite establecer una nueva contraseña de
+al menos 8 caracteres. La cédula se usa para comprobar la identidad; no la
+comparta con otras personas.
+
+AYUDA
+----
+Si no puede ingresar, compruebe que escribió correctamente el nombre de usuario,
+la contraseña y el resultado de la verificación. Si la cuenta está desactivada
+o no recuerda sus credenciales, comuníquese con un administrador del sistema.
