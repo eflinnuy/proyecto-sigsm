@@ -116,7 +116,7 @@ cortafuegos permita conexiones al puerto 3500.
 La base de datos incluye cuentas de prueba:
 
     admin / 1234
-    usuario / 1234
+    Plemma_1891 / Plemma1891?
 
 La cuenta `admin` tiene perfil de administrador. La cuenta `usuario` tiene el
 perfil Médico / Funcionario. Cambiar las contraseñas de prueba antes de usar el
